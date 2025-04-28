@@ -1,6 +1,9 @@
 
 using Microsoft.EntityFrameworkCore;
 using Saycret.Data;
+using Saycret.Interfaces;
+using Saycret.Repositories;
+using Saycret.Services;
 using System;
 
 namespace Saycret
@@ -17,6 +20,9 @@ namespace Saycret
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddScoped<IConfession,ConfessionServices>();
+            builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddDbContext<SaycretDbContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
             var app = builder.Build();

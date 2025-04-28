@@ -266,3 +266,4 @@ E:\Git projects\Saycret\obj\Debug\net8.0\refint\Saycret.dll
 E:\Git projects\Saycret\obj\Debug\net8.0\Saycret.pdb
 E:\Git projects\Saycret\obj\Debug\net8.0\Saycret.genruntimeconfig.cache
 E:\Git projects\Saycret\obj\Debug\net8.0\ref\Saycret.dll
+E:\Git projects\Saycret\obj\Debug\net8.0\Saycret.sourcelink.json

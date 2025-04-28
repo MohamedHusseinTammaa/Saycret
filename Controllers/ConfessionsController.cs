@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Saycret.Interfaces;
+using Saycret.Models;
 
 namespace Saycret.Controllers
 {
@@ -7,10 +9,17 @@ namespace Saycret.Controllers
     [ApiController]
     public class ConfessionsController : ControllerBase
     {
+        IConfession _confession;
+        public ConfessionsController(IConfession confession)
+        {
+            _confession = confession;
+        }
+
         [HttpGet]
         public IActionResult GetAllConfession(long id)
         {
-            return Ok();
+            List<Confession> list =_confession.GetAllConfessions(0, 10);
+            return Ok(list);
         }
         [HttpPost]
         public IActionResult PostConfession()

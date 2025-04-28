@@ -7,7 +7,7 @@ namespace Saycret.Interfaces
         // crud 
         void CreatConfession(Confession confession);
         List<Confession> GetAllConfessions(int skip, int take);
-        bool UpdateConfession(Confession confession);
-        bool DeleteConfession(int confessionId);
+        void UpdateConfession(Confession confession);
+        void DeleteConfession(int confessionId);
     }
 }

@@ -3,6 +3,46 @@
   "WorkspaceRootPath": "E:\\Git projects\\Saycret\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{93B70216-A612-4BB1-B8F9-0B931787A88F}|Saycret.csproj|e:\\git projects\\saycret\\services\\confessionservices.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{93B70216-A612-4BB1-B8F9-0B931787A88F}|Saycret.csproj|solutionrelative:services\\confessionservices.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{93B70216-A612-4BB1-B8F9-0B931787A88F}|Saycret.csproj|e:\\git projects\\saycret\\repositories\\repository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{93B70216-A612-4BB1-B8F9-0B931787A88F}|Saycret.csproj|solutionrelative:repositories\\repository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{93B70216-A612-4BB1-B8F9-0B931787A88F}|Saycret.csproj|e:\\git projects\\saycret\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{93B70216-A612-4BB1-B8F9-0B931787A88F}|Saycret.csproj|solutionrelative:controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{93B70216-A612-4BB1-B8F9-0B931787A88F}|Saycret.csproj|e:\\git projects\\saycret\\interfaces\\iuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{93B70216-A612-4BB1-B8F9-0B931787A88F}|Saycret.csproj|solutionrelative:interfaces\\iuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{93B70216-A612-4BB1-B8F9-0B931787A88F}|Saycret.csproj|e:\\git projects\\saycret\\interfaces\\iconfession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{93B70216-A612-4BB1-B8F9-0B931787A88F}|Saycret.csproj|solutionrelative:interfaces\\iconfession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{93B70216-A612-4BB1-B8F9-0B931787A88F}|Saycret.csproj|e:\\git projects\\saycret\\repositories\\unitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{93B70216-A612-4BB1-B8F9-0B931787A88F}|Saycret.csproj|solutionrelative:repositories\\unitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{93B70216-A612-4BB1-B8F9-0B931787A88F}|Saycret.csproj|e:\\git projects\\saycret\\repositories\\iunitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{93B70216-A612-4BB1-B8F9-0B931787A88F}|Saycret.csproj|solutionrelative:repositories\\iunitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{93B70216-A612-4BB1-B8F9-0B931787A88F}|Saycret.csproj|e:\\git projects\\saycret\\repositories\\irepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{93B70216-A612-4BB1-B8F9-0B931787A88F}|Saycret.csproj|solutionrelative:repositories\\irepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{93B70216-A612-4BB1-B8F9-0B931787A88F}|Saycret.csproj|e:\\git projects\\saycret\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{93B70216-A612-4BB1-B8F9-0B931787A88F}|Saycret.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{93B70216-A612-4BB1-B8F9-0B931787A88F}|Saycret.csproj|e:\\git projects\\saycret\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{93B70216-A612-4BB1-B8F9-0B931787A88F}|Saycret.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{93B70216-A612-4BB1-B8F9-0B931787A88F}|Saycret.csproj|e:\\git projects\\saycret\\controllers\\confessionscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{93B70216-A612-4BB1-B8F9-0B931787A88F}|Saycret.csproj|solutionrelative:controllers\\confessionscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -15,20 +55,12 @@
       "RelativeMoniker": "D:0:0:{93B70216-A612-4BB1-B8F9-0B931787A88F}|Saycret.csproj|solutionrelative:models\\confession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{93B70216-A612-4BB1-B8F9-0B931787A88F}|Saycret.csproj|e:\\git projects\\saycret\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{93B70216-A612-4BB1-B8F9-0B931787A88F}|Saycret.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{93B70216-A612-4BB1-B8F9-0B931787A88F}|Saycret.csproj|e:\\git projects\\saycret\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{93B70216-A612-4BB1-B8F9-0B931787A88F}|Saycret.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{93B70216-A612-4BB1-B8F9-0B931787A88F}|Saycret.csproj|e:\\git projects\\saycret\\data\\saycretdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{93B70216-A612-4BB1-B8F9-0B931787A88F}|Saycret.csproj|solutionrelative:data\\saycretdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{93B70216-A612-4BB1-B8F9-0B931787A88F}|Saycret.csproj|e:\\git projects\\saycret\\data\\saycretdbcontextfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{93B70216-A612-4BB1-B8F9-0B931787A88F}|Saycret.csproj|solutionrelative:data\\saycretdbcontextfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{93B70216-A612-4BB1-B8F9-0B931787A88F}|Saycret.csproj|e:\\git projects\\saycret\\data\\saycretdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{93B70216-A612-4BB1-B8F9-0B931787A88F}|Saycret.csproj|solutionrelative:data\\saycretdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -38,37 +70,154 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 10,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 6,
+              "Title": "IUnitOfWork.cs",
+              "DocumentMoniker": "E:\\Git projects\\Saycret\\Repositories\\IUnitOfWork.cs",
+              "RelativeDocumentMoniker": "Repositories\\IUnitOfWork.cs",
+              "ToolTip": "E:\\Git projects\\Saycret\\Repositories\\IUnitOfWork.cs",
+              "RelativeToolTip": "Repositories\\IUnitOfWork.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-28T19:18:19.844Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Repository.cs",
+              "DocumentMoniker": "E:\\Git projects\\Saycret\\Repositories\\Repository.cs",
+              "RelativeDocumentMoniker": "Repositories\\Repository.cs",
+              "ToolTip": "E:\\Git projects\\Saycret\\Repositories\\Repository.cs",
+              "RelativeToolTip": "Repositories\\Repository.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAAAYwDsAAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-28T19:16:13.372Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "IRepository.cs",
+              "DocumentMoniker": "E:\\Git projects\\Saycret\\Repositories\\IRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\IRepository.cs",
+              "ToolTip": "E:\\Git projects\\Saycret\\Repositories\\IRepository.cs",
+              "RelativeToolTip": "Repositories\\IRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-28T19:05:28.74Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "IConfession.cs",
+              "DocumentMoniker": "E:\\Git projects\\Saycret\\Interfaces\\IConfession.cs",
+              "RelativeDocumentMoniker": "Interfaces\\IConfession.cs",
+              "ToolTip": "E:\\Git projects\\Saycret\\Interfaces\\IConfession.cs",
+              "RelativeToolTip": "Interfaces\\IConfession.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-28T14:28:10.796Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "User.cs",
+              "DocumentMoniker": "E:\\Git projects\\Saycret\\Models\\User.cs",
+              "RelativeDocumentMoniker": "Models\\User.cs",
+              "ToolTip": "E:\\Git projects\\Saycret\\Models\\User.cs",
+              "RelativeToolTip": "Models\\User.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-23T18:39:36.198Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "IUser.cs",
+              "DocumentMoniker": "E:\\Git projects\\Saycret\\Interfaces\\IUser.cs",
+              "RelativeDocumentMoniker": "Interfaces\\IUser.cs",
+              "ToolTip": "E:\\Git projects\\Saycret\\Interfaces\\IUser.cs",
+              "RelativeToolTip": "Interfaces\\IUser.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-28T14:28:41.7Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "AccountController.cs",
+              "DocumentMoniker": "E:\\Git projects\\Saycret\\Controllers\\AccountController.cs",
+              "RelativeDocumentMoniker": "Controllers\\AccountController.cs",
+              "ToolTip": "E:\\Git projects\\Saycret\\Controllers\\AccountController.cs",
+              "RelativeToolTip": "Controllers\\AccountController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-28T13:48:47.705Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
               "Title": "ConfessionsController.cs",
               "DocumentMoniker": "E:\\Git projects\\Saycret\\Controllers\\ConfessionsController.cs",
               "RelativeDocumentMoniker": "Controllers\\ConfessionsController.cs",
               "ToolTip": "E:\\Git projects\\Saycret\\Controllers\\ConfessionsController.cs",
               "RelativeToolTip": "Controllers\\ConfessionsController.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAAA4AAAASAAAAAAAAAA==",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAAABUAAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-23T21:51:24.291Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "SaycretDbContextFactory.cs",
-              "DocumentMoniker": "E:\\Git projects\\Saycret\\Data\\SaycretDbContextFactory.cs",
-              "RelativeDocumentMoniker": "Data\\SaycretDbContextFactory.cs",
-              "ToolTip": "E:\\Git projects\\Saycret\\Data\\SaycretDbContextFactory.cs",
-              "RelativeToolTip": "Data\\SaycretDbContextFactory.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAFAAAAAAAAAA==",
+              "DocumentIndex": 8,
+              "Title": "Program.cs",
+              "DocumentMoniker": "E:\\Git projects\\Saycret\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "E:\\Git projects\\Saycret\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAgwBsAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-23T20:46:10.794Z",
+              "WhenOpened": "2025-04-23T20:00:07.954Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
+              "Title": "UnitOfWork.cs",
+              "DocumentMoniker": "E:\\Git projects\\Saycret\\Repositories\\UnitOfWork.cs",
+              "RelativeDocumentMoniker": "Repositories\\UnitOfWork.cs",
+              "ToolTip": "E:\\Git projects\\Saycret\\Repositories\\UnitOfWork.cs*",
+              "RelativeToolTip": "Repositories\\UnitOfWork.cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-28T19:21:08.403Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ConfessionServices.cs",
+              "DocumentMoniker": "E:\\Git projects\\Saycret\\Services\\ConfessionServices.cs",
+              "RelativeDocumentMoniker": "Services\\ConfessionServices.cs",
+              "ToolTip": "E:\\Git projects\\Saycret\\Services\\ConfessionServices.cs",
+              "RelativeToolTip": "Services\\ConfessionServices.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACEAAABEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-28T14:51:37.984Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
               "Title": "appsettings.json",
               "DocumentMoniker": "E:\\Git projects\\Saycret\\appsettings.json",
               "RelativeDocumentMoniker": "appsettings.json",
@@ -76,57 +225,46 @@
               "RelativeToolTip": "appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAADAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-04-23T20:12:16.537Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "SaycretDbContext.cs",
-              "DocumentMoniker": "E:\\Git projects\\Saycret\\Data\\SaycretDbContext.cs",
-              "RelativeDocumentMoniker": "Data\\SaycretDbContext.cs",
-              "ToolTip": "E:\\Git projects\\Saycret\\Data\\SaycretDbContext.cs",
-              "RelativeToolTip": "Data\\SaycretDbContext.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAABDAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-23T20:03:05.39Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Program.cs",
-              "DocumentMoniker": "E:\\Git projects\\Saycret\\Program.cs",
-              "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "E:\\Git projects\\Saycret\\Program.cs",
-              "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAMAAAANAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-23T20:00:07.954Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "User.cs",
-              "DocumentMoniker": "E:\\Git projects\\Saycret\\Models\\User.cs",
-              "RelativeDocumentMoniker": "Models\\User.cs",
-              "ToolTip": "E:\\Git projects\\Saycret\\Models\\User.cs",
-              "RelativeToolTip": "Models\\User.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAowAwAAAAoAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-23T18:39:36.198Z",
+              "WhenOpened": "2025-04-23T20:12:16.537Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 12,
               "Title": "Confession.cs",
               "DocumentMoniker": "E:\\Git projects\\Saycret\\Models\\Confession.cs",
               "RelativeDocumentMoniker": "Models\\Confession.cs",
               "ToolTip": "E:\\Git projects\\Saycret\\Models\\Confession.cs",
               "RelativeToolTip": "Models\\Confession.cs",
-              "ViewState": "AgIAAAgAAAAAAAAAAAAxwBYAAAAoAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-23T18:26:18.069Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "SaycretDbContext.cs",
+              "DocumentMoniker": "E:\\Git projects\\Saycret\\Data\\SaycretDbContext.cs",
+              "RelativeDocumentMoniker": "Data\\SaycretDbContext.cs",
+              "ToolTip": "E:\\Git projects\\Saycret\\Data\\SaycretDbContext.cs",
+              "RelativeToolTip": "Data\\SaycretDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-23T20:03:05.39Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "SaycretDbContextFactory.cs",
+              "DocumentMoniker": "E:\\Git projects\\Saycret\\Data\\SaycretDbContextFactory.cs",
+              "RelativeDocumentMoniker": "Data\\SaycretDbContextFactory.cs",
+              "ToolTip": "E:\\Git projects\\Saycret\\Data\\SaycretDbContextFactory.cs",
+              "RelativeToolTip": "Data\\SaycretDbContextFactory.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-23T20:46:10.794Z"
             }
           ]
         }

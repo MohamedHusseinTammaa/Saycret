@@ -9,7 +9,7 @@ namespace Saycret.Repositories
         private readonly Dictionary<Type, object> _repositories;
         private bool _disposed;
 
-        UnitOfWork(SaycretDbContext saycretDbContext)
+        public UnitOfWork(SaycretDbContext saycretDbContext)
         {
             _context = saycretDbContext;
             _repositories = new Dictionary<Type, object>();
