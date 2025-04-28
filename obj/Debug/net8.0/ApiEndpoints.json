@@ -1,0 +1,12 @@
+[
+  {
+    "ContainingType": "Saycret.Controllers.ConfessionsController",
+    "Method": "PostConfession",
+    "RelativePath": "api/Confessions",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  }
+]
