@@ -1,4 +1,5 @@
-﻿using Saycret.Interfaces;
+﻿using Saycret.DTOs.Confession;
+using Saycret.Interfaces;
 using Saycret.Models;
 using Saycret.Repositories;
 
@@ -11,27 +12,69 @@ namespace Saycret.Services
         {
             _UnitOfWork = unitOfWork;
         }
-        public void CreatConfession(Confession confession)
+        public void CreatConfession(CreateConfessionDTO confessionDto)
         {
-            _UnitOfWork.Repository<Confession>().Add(confession);   
+            Confession confession = new Confession
+            {
+                Content = confessionDto.Content,
+                ParentId = confessionDto.ParentId,
+                CreatedAt = DateTime.UtcNow,
+                AutherId = confessionDto.AuthorId,
+                Allowed = true,
+                likes = 0
+            };
+
+            _UnitOfWork.Repository<Confession>().Add(confession);
             _UnitOfWork.Commit();
         }
 
-        public void DeleteConfession(int confessionId)
+        public void DeleteConfession(long confessionId)
         {
             _UnitOfWork.Repository<Confession>().Delete(confessionId);
             _UnitOfWork.Commit();
 
         }
 
-        public List<Confession> GetAllConfessions(int skip, int take)
+        public List<ConfessionDTO> GetAllConfessions(int skip, int take)
         {
-           return _UnitOfWork.Repository<Confession>().FindAll(c => true, 0, 10);
+            List<ConfessionDTO> confessionDTOs = new List<ConfessionDTO>();
+
+            // Pass the actual skip and take values
+            List<Confession> confessions = _UnitOfWork.Repository<Confession>().FindAll(c => true, take, skip);
+
+            foreach (Confession confession in confessions)
+            {
+                ConfessionDTO dto = new ConfessionDTO();
+                dto.Content = confession.Content;
+                dto.ParentId = confession.ParentId;
+                dto.CreatedAt = confession.CreatedAt;
+                dto.Id = confession.Id;
+                dto.Likes = confession.likes;
+
+                confessionDTOs.Add(dto);
+            }
+
+            return confessionDTOs;
         }
 
-        public void UpdateConfession(Confession confession)
+        public ConfessionDTO GetConfession(long id)
         {
-            _UnitOfWork.Repository<Confession>().Update(confession, confession.Id);
+            ConfessionDTO confession = new ConfessionDTO();
+            Confession c =_UnitOfWork.Repository<Confession>().GetByID(id);
+            confession.Content = c.Content;
+            confession.ParentId = c.ParentId;
+            confession.CreatedAt = c.CreatedAt;
+            confession.Id = c.Id;
+            confession.Likes = c.likes;
+            return confession;
+        }
+
+        public void UpdateConfession(UpdateConfessionDTO confession)
+        {
+            Confession confession1 = new Confession();
+            confession1.Content = confession.Content;
+            confession1.Id = confession.Id;
+            _UnitOfWork.Repository<Confession>().Update(confession1, confession.Id);
         }
     }
 }

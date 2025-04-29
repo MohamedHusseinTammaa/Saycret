@@ -17,9 +17,9 @@ namespace Saycret.Models
        public bool Allowed { get; set; }
 
        [ForeignKey("Parent")]
-       public long ParentId { get; set; }
+       public long? ParentId { get; set; }
        public Confession Parent { get; set; }
-        [ForeignKey("Auther")]
+        [ForeignKey("Author")]
        public int AutherId { get; set; }
         public User Author { get; set; }
 

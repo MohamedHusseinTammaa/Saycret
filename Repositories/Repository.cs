@@ -52,7 +52,7 @@ namespace Saycret.Repositories
         }
         public T GetByID(long id)
         {
-            T? l = _dbSet.Find(id);
+            T l = _dbSet.Find(id);
             if (l != null)
                 return l;
             throw new KeyNotFoundException(message: $"Entity with ID {id} not found.");

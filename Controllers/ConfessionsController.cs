@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Saycret.DTOs.Confession;
 using Saycret.Interfaces;
 using Saycret.Models;
 
@@ -16,14 +17,22 @@ namespace Saycret.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllConfession(long id)
+        public IActionResult GetAllConfession()
         {
-            List<Confession> list =_confession.GetAllConfessions(0, 10);
+            List<ConfessionDTO> list =_confession.GetAllConfessions(0, 10);
             return Ok(list);
         }
-        [HttpPost]
-        public IActionResult PostConfession()
+        [HttpGet]
+        [Route("{id:long}")]
+        public IActionResult GetConfessionById([FromRoute]long id) 
         {
+            ConfessionDTO c = _confession.GetConfession(id);
+            return Ok(c);
+        }
+        [HttpPost]
+        public IActionResult PostConfession([FromBody]CreateConfessionDTO confession)
+        {
+            _confession.CreatConfession(confession);
             return Ok();    
         }
     }
