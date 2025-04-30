@@ -32,8 +32,26 @@ namespace Saycret.Controllers
         [HttpPost]
         public IActionResult PostConfession([FromBody]CreateConfessionDTO confession)
         {
-            _confession.CreatConfession(confession);
-            return Ok();    
+            if (ModelState.IsValid)
+            {
+                _confession.CreatConfession(confession);
+                return StatusCode(StatusCodes.Status204NoContent);
+
+            }
+            
+            return BadRequest(ModelState);
+        }
+        [HttpPut("{id:long}")]
+        public IActionResult UpdateConfession([FromBody] UpdateConfessionDTO confession , long id)
+        {
+            if (ModelState.IsValid)
+            {
+                confession.Id = id;
+                _confession.UpdateConfession(confession);
+                return Ok();
+            }
+
+            return BadRequest(ModelState);
         }
     }
 }

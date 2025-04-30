@@ -1,4 +1,5 @@
-﻿using Saycret.DTOs.Confession;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Saycret.DTOs.Confession;
 using Saycret.Interfaces;
 using Saycret.Models;
 using Saycret.Repositories;
@@ -71,10 +72,11 @@ namespace Saycret.Services
 
         public void UpdateConfession(UpdateConfessionDTO confession)
         {
-            Confession confession1 = new Confession();
-            confession1.Content = confession.Content;
-            confession1.Id = confession.Id;
-            _UnitOfWork.Repository<Confession>().Update(confession1, confession.Id);
+            var existing = _UnitOfWork.Repository<Confession>().GetByID(confession.Id);
+            if(existing == null) throw new KeyNotFoundException ($"Confession with ID {confession.Id} not found.");
+            existing.Content = confession.Content;
+            _UnitOfWork.Repository<Confession>().Update(existing, existing.Id);    
+            _UnitOfWork.Commit();
         }
     }
 }

@@ -6,6 +6,7 @@ namespace Saycret.DTOs.Confession
     {
         [Required]
         [MaxLength(250)]
+        [MinLength(7)]
         public string Content { get; set; }
 
         public long? ParentId { get; set; }

@@ -62,12 +62,15 @@ namespace Saycret.Repositories
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
 
-            var existing =  _dbSet.Find(id);
+            var existing = _dbSet.Find(id);
             if (existing == null)
                 throw new KeyNotFoundException($"Entity with ID {id} not found.");
 
-            _context.Entry(existing).CurrentValues.SetValues(entity);
+            _context.Entry(existing).CurrentValues.SetValues(entity); 
+            _context.SaveChanges();
+
             return existing;
         }
+
     }
 }

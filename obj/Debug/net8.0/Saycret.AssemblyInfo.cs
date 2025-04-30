@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Saycret")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+87788a3c2498ea6e94dd16f3876930669d397b22")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9e4a1f916e6f6f40b13d33d7b08a402c6851f049")]
 [assembly: System.Reflection.AssemblyProductAttribute("Saycret")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Saycret")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
