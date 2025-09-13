@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createPost, getPostById, getPosts ,editWholePost, editPartPost} from "../Controllers/PostsController.mjs"; 
+import { createPost, getPostById, getPosts ,editWholePost, editPartPost,deletePost} from "../Controllers/PostsController.mjs"; 
 import { createPostSchema , postQuerySchema,checkIndex} from "../Middlewares/validationSchemas.mjs"
 import {checkSchema} from "express-validator";
 
@@ -11,8 +11,9 @@ router.get("/:id",checkIndex,getPostById);
 //create a new post
 router.post("/",checkSchema(createPostSchema),createPost);
 //edit the whole post
-router.put("/:id",checkIndex,checkSchema(createPostSchema),checkIndex,editWholePost);
+router.put("/:id",checkSchema(createPostSchema),editWholePost);
 //edit part of the post
 router.patch("/:id",checkIndex,editPartPost);
-
+//delete post
+router.delete("/:id",checkIndex,deletePost)
 export {router};
