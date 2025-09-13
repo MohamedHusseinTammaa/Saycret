@@ -1,54 +1,71 @@
-
 import {posts} from "../Data/posts.mjs"
 import {validationResult} from "express-validator";
-const getPosts = (req,res)=>{
-    const error = validationResult(req);
-    console.log(error);
+import post from "../Models/Posts.mjs"
+const getPosts = async (req,res)=>{
+    const errors = validationResult(req);
+    if(!errors.isEmpty()&&Object.keys(req.query).length!==0){
+        return res.status(400).send({"errors" : errors.array()});
+    }
+    const posts = await post.find().lean();
     let filtered=posts;
-    if(req.query.writer) filtered = posts.filter(x =>x.writer.toLowerCase().includes(req.query.writer));
-    res.status(200).json(filtered);    
+    if(req.query.writer) 
+        filtered = posts.filter(x =>x.writer.toLowerCase().includes(req.query.writer)); 
+    res.status(200).json(filtered);
 };
-const getPostById= (req,res)=>{
-    const idparsed = parseInt(req.params["id"]);
-    if(isNaN(idparsed))return res.status(400).end();
-    const post = posts.find(value => value.id===idparsed);
-    if(post === undefined)return res.status(404).end();
-    res.status(200).json(post);
+const getPostById= async(req,res)=>{
+    try {
+        const idparsed = req.params["id"];
+        const pos= await post.findById(idparsed).lean();
+        if(!pos)return res.status(404).json({msg:"post doesn't exist"});
+        res.status(200).json(pos);
+    }
+    catch(err){
+        return res .status(404).json({msg:"Invalid Request"})
+    }
+    
 };
-const createPost=(req,res)=>{
+const createPost= async (req,res)=>{
         const errors = validationResult(req);
         if(!errors.isEmpty()){
             return res.status(400).send({"errors" : errors.array()});
         }
         const {body} = req;
         const bodyJson = body;
-        posts.push({id:posts.length+1, ...bodyJson});
-        res.status(201).json(bodyJson);
+        const newPost = await post.insertOne({...body});    
+        res.status(201).json(newPost);
 };
-const editWholePost=(req,res)=>{
+const editWholePost= async (req,res)=>{
     const errors = validationResult(req);
     if(!errors.isEmpty()){
         return res.status(400).send({"errors" : errors.array()});
     }
-    let {body,postIndex} = req;
-    posts[postIndex]={id:posts[postIndex].id,...body};
-    res.status(200).send({id:posts[postIndex].id,...body});
+    let {body,params:{id}} = req;
+    console.log(body,id);
+    const Edited = await post.findByIdAndUpdate({"_id" : id},{$set:{...body}}, {new : true , lean : true} );
+    res.status(200).send(Edited);
 };
-const editPartPost=(req,res)=>{
+const editPartPost= async (req,res)=>{
     let {body , params :{id}} = req;
-    const parsedId = parseInt(id);
-    if(isNaN(parsedId))return res.status(400).end();
-    const find = posts.findIndex(post =>post.id ===parsedId);
-    if(find===-1)return res.status(400).end();
-    id = parsedId;
-    posts[find]={...posts[find],...body};
-    res.status(200).send(posts[find]);
+    const pos= await post.findById(id).lean();
+    if(!pos)
+        return res.status(404).json({msg:"post doesn't exist"});
+    const Edited = await post.findByIdAndUpdate({"_id" : id},{$set:{...body}}, {new : true , lean : true} );
+    res.status(200).send(Edited);
 };
+const deletePost = async (req,res)=>{
+     let {params :{id}} = req;
+    const pos= await post.findById(id).lean();
+    if(!pos)
+        return res.status(404).json({msg:"post doesn't exist"});
+    const deleted = await post.findByIdAndDelete(id).lean();
+    res.status(200).send(deleted);
+}
 
 export {
   getPosts,
   getPostById,
   createPost,
   editWholePost,
-  editPartPost
+  editPartPost,
+  deletePost
 };
