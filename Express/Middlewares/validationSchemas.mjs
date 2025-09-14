@@ -39,11 +39,9 @@ export const createPostSchema= {
 };
 export const postQuerySchema= {
     writer :{
+        optional: true,
         isString:{
             errorMessage:"writer must be string!"
-        },
-        notEmpty:{
-            errorMessage : "you need to enter the writer"
         },
         isLength:{
             options:{
@@ -52,7 +50,26 @@ export const postQuerySchema= {
             },
             errorMessage: "you must enter a writer from 5 to 32 chars"
         }
+    },limit :{
+        optional:true,
+        isInt:{
+            options:{
+                min :1,
+                max :20
+            },
+            errorMessage: "limit from 1 post to 20"
+        }
     },
+    page :{
+        optional:true,
+        isInt:{
+             options:{
+                min :1,
+                max :20
+            },
+            errorMessage: "start from 1"
+        }
+    }
 };
 
 export const addUserSchema = {
