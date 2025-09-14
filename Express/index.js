@@ -3,7 +3,7 @@ import { router as PostsRouter } from "./Routes/PostsRouts.mjs";
 import { router as usersRouter } from "./Routes/UsersRouters.mjs";
 import 'dotenv/config'
 import mongoose from "mongoose";
-const url = process.env.DB_URL
+const url = process.env.DB_URL;
 mongoose.connect(url).then(()=>{
     console.log("mongodb is connected")
 });
