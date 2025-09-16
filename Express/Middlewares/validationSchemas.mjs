@@ -1,8 +1,9 @@
+import * as httpStatus from "../Utils/HttpStatusText.mjs"
 import { posts } from "../Data/posts.mjs";
 export const checkIndex= (req,res,next)=>{
     let {params :{id}} = req;
     const parsedId = parseInt(id);
-    if(isNaN(parsedId))return res.status(400).end();
+    if(isNaN(parsedId))return res.status(400).json({status:httpStatus.FAIL,data:null,message:"Only enter number in url"});
     next();
 };
 export const createPostSchema= {
