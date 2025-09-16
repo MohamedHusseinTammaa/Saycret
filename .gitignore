@@ -9,3 +9,5 @@ node_modules/
 
 # Ignore your output repo files
 *.txt
+
+*.env
