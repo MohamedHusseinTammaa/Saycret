@@ -23,7 +23,6 @@ const getAllUsers = asyncWrapper(async (req, res, next) => {
         data: { users },
     });
 });
-
 const getUserById = asyncWrapper(async (req, res, next) => {
     const { id } = req.params;
     const user = await User.findById(id).lean();
@@ -37,13 +36,12 @@ const getUserById = asyncWrapper(async (req, res, next) => {
         data: user,
     });
 });
-
 const register = asyncWrapper(async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return next(new AppError(httpMessage.BAD_REQUEST, 400, httpStatus.FAIL, errors.array()));
     }
-    let  {name:{first,last},userName,dateOfBirth,gender,phoneNumber,email,password } = req.body;
+    let  {name:{first,last},userName,dateOfBirth,gender,phoneNumber,email,password,role } = req.body;
     if (dateOfBirth) {
         const [day, month, year] = dateOfBirth.split("-");
         dateOfBirth = new Date(year, month - 1, day);
@@ -57,7 +55,8 @@ const register = asyncWrapper(async (req, res, next) => {
             gender,
             phoneNumber,
             email,
-            password: hashedPassword
+            password: hashedPassword,
+            role
         });
         await newUser.save();
         const user = await User.find({ _id: newUser.id }, { password: 0, __v: 0 });
@@ -80,7 +79,7 @@ const login = asyncWrapper (async(req,res,next)=>{
     }
     const passwordMatched=await bcrypt.compare(password,user.password);
     if(passwordMatched){
-        const token = await Jwt.sign({email:user.email,id:user.id},process.env.JWT_KEY);
+        const token = await Jwt.sign({email:user.email,id:user.id,role:user.role},process.env.JWT_KEY);
         return res.status(200).json({
             status: httpStatus.SUCCESS,
             data: user.email,
@@ -118,7 +117,6 @@ const editUser = asyncWrapper(async (req, res, next) => {
         data: updated,
     });
 });
-
 const deleteUser = asyncWrapper(async (req, res, next) => {
     const { id } = req.params;
     const user = await User.findById(id).lean();

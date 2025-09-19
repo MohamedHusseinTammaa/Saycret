@@ -1,5 +1,4 @@
 import * as httpStatus from "../Utils/HttpStatusText.mjs"
-import { posts } from "../Data/posts.mjs";
 export const checkIndex= (req,res,next)=>{
     let {params :{id}} = req;
     const parsedId = parseInt(id);

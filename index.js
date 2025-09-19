@@ -15,7 +15,6 @@ const port = process.env.port;
 const app = Express();
 app.use(cors())
 app.use(Express.json());
-app.use(verifyToken);
 app.use("/api/posts",PostsRouter);
 app.use("/api/users",usersRouter);
 app.use((req,res,next)=>{
