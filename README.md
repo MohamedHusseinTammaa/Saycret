@@ -7,6 +7,24 @@ The app is designed to combine the openness of social media with the privacy of 
 
 ---
 
+## 🚀 Development Approach
+
+This project was developed following **Agile principles**:
+
+- **User Stories**: Defined the application features from the perspective of the end-user.  
+- **Prioritization**: Each story was assigned a **priority** and **story points** based on effort and business value.  
+- **Backlog Management**: Features were organized and refined to plan development iterations.  
+- **Incremental Delivery**: The first increment focused on **Authentication & Authorization** to establish a secure foundation.  
+
+📌 Example User Stories:
+- As a user, I want to **register** so that I can create an account.  
+- As a user, I want to **login** so that I can access my account securely.  
+- As a user, I want to **post anonymously** so that I can share without revealing my identity.  
+
+➡️ [See full backlog & prioritization here](Saycret/Documentation).
+
+---
+
 ##  Current Progress
 At this stage, the following functionality has been implemented:
 - ✅ User authentication (register, login, logout)  
