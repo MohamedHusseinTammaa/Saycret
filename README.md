@@ -21,7 +21,7 @@ This project was developed following **Agile principles**:
 - As a user, I want to **login** so that I can access my account securely.  
 - As a user, I want to **post anonymously** so that I can share without revealing my identity.  
 
-➡️ [See full backlog & prioritization here](Saycret/Documentation).
+➡️ [See full backlog & prioritization here](Documentation).
 
 ---
 
