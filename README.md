@@ -21,15 +21,19 @@ This project was developed following **Agile principles**:
 - As a user, I want to **login** so that I can access my account securely.  
 - As a user, I want to **post anonymously** so that I can share without revealing my identity.  
 
-➡️ [See full backlog & prioritization here](Saycret/Documentation).
+➡️ [See full backlog & prioritization here](Documentation).
 
 ---
+## 📅 Sprint Progress
 
-##  Current Progress
-At this stage, the following functionality has been implemented:
-- ✅ User authentication (register, login, logout)  
-- ✅ Role-based authorization (user, admin)  
+### Sprint 1 (✅ Completed)
+- Implemented Authentication & Authorization
+- Completed Stories: Register (#1), Login (#2)
 
+### Sprint 2 (🚀 In Progress)
+- Focus on Post, Profile, Like/Dislike features
+- Planned Stories: Post (#3), Enter Profile (#4), Like/Dislike (#5)
+---
 The project is still under development. Upcoming features will be implemented based on the prioritized user stories.
 ### Planned
 - User profile management  
