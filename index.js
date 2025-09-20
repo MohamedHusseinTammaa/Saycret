@@ -13,8 +13,10 @@ mongoose.connect(url).then(()=>{
 });
 const port = process.env.port;
 const app = Express();
+
 app.use(cors())
 app.use(Express.json());
+
 app.use("/api/posts",PostsRouter);
 app.use("/api/users",usersRouter);
 app.use((req,res,next)=>{
@@ -24,12 +26,11 @@ app.use((req,res,next)=>{
 app.use((err, req, res, next) => {
     res.status(err.statusCode || 500).json({
         status: err.statusText || "error",
-        data: null,
-        message: err.message || "Internal Server Error",
+        data:null,
+        message:err.message || "Internal Server Error",
         details:err.details
     });
 });
-
 
 app.listen(port,()=>{
     console.log("listening on port : "+port)

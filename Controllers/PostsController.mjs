@@ -1,5 +1,5 @@
 import { validationResult } from "express-validator";
-import post from "../Models/Posts.mjs";
+import Post from "../Models/Posts.mjs";
 import { asyncWrapper } from "../Middlewares/Errors/ErrorWrapper.mjs";
 import * as httpStatus from "../Utils/HttpStatusText.mjs";
 import * as httpMessage from "../Utils/HttpDataText.mjs";
@@ -8,9 +8,7 @@ import { AppError } from "../Utils/AppError.mjs";
 const getPosts = asyncWrapper(async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return next(
-            new AppError(httpMessage.BAD_REQUEST, 400, httpStatus.FAIL, errors.array())
-        );
+        return next(new AppError(httpMessage.BAD_REQUEST, 400, httpStatus.FAIL, errors.array()));
     }
 
     const limit = Number(req.query.limit) || 10;
@@ -22,7 +20,7 @@ const getPosts = asyncWrapper(async (req, res, next) => {
         query.writer = new RegExp(req.query.writer, "i");
     }
 
-    const posts = await post.find(query).limit(limit).skip(skip).lean();
+    const posts = await Post.find(query).limit(limit).skip(skip).lean();
 
     res.status(200).json({
         status: httpStatus.SUCCESS,
@@ -33,7 +31,7 @@ const getPosts = asyncWrapper(async (req, res, next) => {
 
 const getPostById = asyncWrapper(async (req, res, next) => {
     const { id } = req.params;
-    const pos = await post.findById(id).lean();
+    const pos = await Post.findById(id).lean();
 
     if (!pos) {
         return next(new AppError(httpMessage.NOT_FOUND, 404, httpStatus.FAIL));
@@ -52,13 +50,29 @@ const createPost = asyncWrapper(async (req, res, next) => {
             new AppError(httpMessage.BAD_REQUEST, 400, httpStatus.FAIL, errors.array())
         );
     }
-
-    const { body } = req;
-    const newPost = await post.create({ ...body });
-
+    const {currentUser,post,isAnonymous} = req;
+    const newPost = await Post.create({
+        post: post,
+        isAnonymous: isAnonymous,
+        writer: currentUser.id
+      });
+      
+    let projection = {
+      isAnonymous: 0,
+      __v: 0
+    };
+    
+    if (newPost.isAnonymous) {
+      projection.writer = 0;
+    }
+    
+    const data = await Post.find({
+      _id: newPost.id
+    }, projection);
+      
     res.status(201).json({
         status: httpStatus.SUCCESS,
-        data: newPost,
+        data: data,
     });
 });
 
@@ -71,7 +85,7 @@ const editWholePost = asyncWrapper(async (req, res, next) => {
     }
 
     const { body, params: { id } } = req;
-    const edited = await post.findByIdAndUpdate(id, { $set: body }, { new: true }).lean();
+    const edited = await Post.findByIdAndUpdate(id, { $set: body }, { new: true }).lean();
 
     if (!edited) {
         return next(new AppError(httpMessage.NOT_FOUND, 404, httpStatus.FAIL));
@@ -85,13 +99,13 @@ const editWholePost = asyncWrapper(async (req, res, next) => {
 
 const editPartPost = asyncWrapper(async (req, res, next) => {
     const { body, params: { id } } = req;
-    const pos = await post.findById(id).lean();
+    const pos = await Post.findById(id).lean();
 
     if (!pos) {
         return next(new AppError(httpMessage.NOT_FOUND, 404, httpStatus.FAIL));
     }
 
-    const edited = await post.findByIdAndUpdate(
+    const edited = await Post.findByIdAndUpdate(
         id,
         { $set: { ...body } },
         { new: true, lean: true }
@@ -105,13 +119,13 @@ const editPartPost = asyncWrapper(async (req, res, next) => {
 
 const deletePost = asyncWrapper(async (req, res, next) => {
     const { id } = req.params;
-    const pos = await post.findById(id).lean();
+    const pos = await Post.findById(id).lean();
 
     if (!pos) {
         return next(new AppError(httpMessage.NOT_FOUND, 404, httpStatus.FAIL));
     }
 
-    const deleted = await post.findByIdAndDelete(id).lean();
+    const deleted = await Post.findByIdAndDelete(id).lean();
 
     res.status(200).json({
         status: httpStatus.SUCCESS,

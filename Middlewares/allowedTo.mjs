@@ -14,6 +14,5 @@ export const allowedTo= (...roles)=>{
             return next(error);
         }
         next();
-        
     }
 }
