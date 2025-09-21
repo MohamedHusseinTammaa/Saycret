@@ -1,4 +1,5 @@
 import * as httpStatus from "../Utils/HttpStatusText.mjs"
+import validator from "validator"
 export const checkIndex= (req,res,next)=>{
     let {params :{id}} = req;
     const parsedId = parseInt(id);
@@ -6,21 +7,6 @@ export const checkIndex= (req,res,next)=>{
     next();
 };
 export const createPostSchema= {
-    writer :{
-        isString:{
-            errorMessage:"writer must be string!"
-        },
-        notEmpty:{
-            errorMessage : "you need to enter the writer"
-        },
-        isLength:{
-            options:{
-                min :5,
-                max :32
-            },
-            errorMessage: "you must enter a writer from 5 to 32 chars !"
-        }
-    },
     post:{
         isString:{
             errorMessage:"post must be string!"
@@ -35,21 +21,28 @@ export const createPostSchema= {
             },
             errorMessage: "the length from 5-300 characters"
         }
+    },
+    isAnonymous:{
+      isBoolean:{
+        errorMessage:"isAnonymous must be true or false"
+      }
     }
 };
 export const postQuerySchema= {
     writer :{
-        optional: true,
-        isString:{
-            errorMessage:"writer must be string!"
-        },
-        isLength:{
-            options:{
-                min :5,
-                max :32
-            },
-            errorMessage: "you must enter a writer from 5 to 32 chars"
-        }
+      notEmpty: {
+      errorMessage: "you need to enter a \"first name\""
+      },
+      isString:{
+          errorMessage:"writer must be string!"
+      },
+      isLength:{
+          options:{
+              min :5,
+              max :32
+          },
+          errorMessage: "you must enter a writer from 5 to 32 chars"
+      }
     },limit :{
         optional:true,
         isInt:{

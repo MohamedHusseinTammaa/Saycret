@@ -14,24 +14,58 @@ const getPosts = asyncWrapper(async (req, res, next) => {
     const limit = Number(req.query.limit) || 10;
     const page = Number(req.query.page) || 1;
     const skip = (page - 1) * limit;
+    let projection = {
+      __v: 0
+    };
+    let posts = await Post.find(projection).populate({path: "writer",select:"name.first name.last"}).limit(limit).skip(skip).lean();
+    posts.forEach(element => {
+        if(element.isAnonymous===true){
+            element.writer="Anonymous";
+        }
+        delete element.isAnonymous;
+    });
 
-    let query = {};
-    if (req.query.writer) {
-        query.writer = new RegExp(req.query.writer, "i");
+    res.status(200).json({
+        status: httpStatus.SUCCESS,
+        data: { posts },
+        pagination: { limit, page }
+    });
+});
+
+const searchPosts = asyncWrapper(async (req,res,next)=>{
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return next(new AppError(httpMessage.BAD_REQUEST, 400, httpStatus.FAIL, errors.array()));
     }
 
-    const posts = await Post.find(query).limit(limit).skip(skip).lean();
+    const limit = Number(req.query.limit) || 10;
+    const page = Number(req.query.page) || 1;
+    const skip = (page - 1) * limit;
+    let projection = {
+      __v: 0
+    };
+    let posts = await Post.find(projection).populate({path: "writer",select:"name.first name.last"}).limit(limit).skip(skip).lean();
+    posts.forEach(element => {
+        if(element.isAnonymous===true){
+            element.writer="Anonymous";
+        }
+        delete element.isAnonymous;
+    });
 
     res.status(200).json({
         status: httpStatus.SUCCESS,
         data: { posts },
         pagination: { limit, page },
     });
-});
-
+    
+})
 const getPostById = asyncWrapper(async (req, res, next) => {
     const { id } = req.params;
-    const pos = await Post.findById(id).lean();
+    const pos = await Post.findById(id,{"__v":0}).populate({path:"writer",select:"name.first name.last"}).lean();
+    if(pos.isAnonymous===true){
+        pos.writer="Anonymous";
+        delete pos.isAnonymous;
+    }
 
     if (!pos) {
         return next(new AppError(httpMessage.NOT_FOUND, 404, httpStatus.FAIL));
@@ -50,11 +84,11 @@ const createPost = asyncWrapper(async (req, res, next) => {
             new AppError(httpMessage.BAD_REQUEST, 400, httpStatus.FAIL, errors.array())
         );
     }
-    const {currentUser,post,isAnonymous} = req;
+    const {post,isAnonymous} = req.body;
     const newPost = await Post.create({
         post: post,
         isAnonymous: isAnonymous,
-        writer: currentUser.id
+        writer: req.currentUser.id
       });
       
     let projection = {
@@ -68,7 +102,7 @@ const createPost = asyncWrapper(async (req, res, next) => {
     
     const data = await Post.find({
       _id: newPost.id
-    }, projection);
+    }, projection).populate({path: "writer",select:"name.first name.last"});
       
     res.status(201).json({
         status: httpStatus.SUCCESS,
@@ -98,7 +132,7 @@ const editWholePost = asyncWrapper(async (req, res, next) => {
 });
 
 const editPartPost = asyncWrapper(async (req, res, next) => {
-    const { body, params: { id } } = req;
+    const { body : {post}, params: { id } } = req;
     const pos = await Post.findById(id).lean();
 
     if (!pos) {
@@ -107,7 +141,7 @@ const editPartPost = asyncWrapper(async (req, res, next) => {
 
     const edited = await Post.findByIdAndUpdate(
         id,
-        { $set: { ...body } },
+        { $set: { post } },
         { new: true, lean: true }
     );
 
@@ -135,6 +169,7 @@ const deletePost = asyncWrapper(async (req, res, next) => {
 
 export {
     getPosts,
+    searchPosts,
     getPostById,
     createPost,
     editWholePost,

@@ -16,7 +16,6 @@ const app = Express();
 
 app.use(cors())
 app.use(Express.json());
-
 app.use("/api/posts",PostsRouter);
 app.use("/api/users",usersRouter);
 app.use((req,res,next)=>{
