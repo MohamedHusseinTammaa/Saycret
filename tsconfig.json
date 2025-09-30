@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+    /* File Layout */
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "allowImportingTsExtensions": true,
+    "noEmit": true, 
+    /* Module + Target */
+    "module": "es6",            // Modern ES modules (import/export)
+    "target": "es2020",            // Async/await + modern features
+    "moduleResolution": "node",    // Node-style resolution
+
+    /* Node.js Environment */
+    "lib": ["esnext"],
+    "types": ["node"],
+    "typeRoots": ["./node_modules/@types", "./src/types"],
+    /* Output */
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+
+    /* Strictness */
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    /* Interop & Compatibility */
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+
+    /* React (only if needed) */
+    // "jsx": "react-jsx",
+
+    /* Avoids 'import type' enforcement */
+    "verbatimModuleSyntax": false
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}

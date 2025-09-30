@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import validator from "validator";
-import { roles } from "../Utils/usersRoles.mjs";
+import { Roles } from "../Utils/usersRoles.ts";
 const usersSchema = new mongoose.Schema({
     name: {
         first: String,
@@ -43,14 +43,15 @@ const usersSchema = new mongoose.Schema({
     },
     role:{
         type: String,
-        enum : [...Object.values(roles)],
-        default :roles.USER
+        enum : [...Object.values(Roles)],
+        default :Roles.USER
     }
 
 });
 
 
 usersSchema.virtual("fullName").get(function () {
+    if(!this.name || !this.name.first || !this.name.last) return null;
     return `${this.name.first} ${this.name.last}`;
 });
 
