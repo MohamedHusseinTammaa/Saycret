@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { InferSchemaType } from "mongoose";
 
 const postschema = new mongoose.Schema({
     writer: {
@@ -23,7 +23,8 @@ const postschema = new mongoose.Schema({
     }
     
 });
-const Post = mongoose.model("Posts",postschema,"Posts");
-export default Post;
+export type Post = InferSchemaType<typeof postschema>;
+const PostModel = mongoose.model<Post>("Posts",postschema,"Posts");
+export default PostModel;
 
 

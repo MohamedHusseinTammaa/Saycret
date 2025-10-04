@@ -1,5 +1,5 @@
 import { validationResult } from "express-validator";
-import User from "../Models/Users.ts";
+import User from "../Domain//Models/Users.ts";
 import Jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import 'dotenv/config';

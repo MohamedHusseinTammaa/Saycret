@@ -1,35 +1,21 @@
 import { validationResult } from "express-validator";
-import Post from "../Models/Posts.ts";
+import PostModel from "../Domain/Models/Posts.ts";
 import { asyncWrapper } from "../Middlewares/Errors/ErrorWrapper.ts";
 import * as httpStatus from "../Utils/HttpStatusText.ts";
 import * as httpMessage from "../Utils/HttpDataText.ts";
 import { AppError } from "../Utils/AppError.ts";
 import type{ Request, Response, NextFunction } from "express";
-
+import {getPostByIdService, getPostsService, searchPostsService,createPostService} from "../Services/postServices.ts/PostServices.ts";
+import type{ Post} from "../Domain/Models/Posts.ts";
 const getPosts = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return next(new AppError(httpMessage.BAD_REQUEST, 400, httpStatus.FAIL, errors.array()));
     }
-
-    const limit = Number(req.query.limit) || 10;
-    const page = Number(req.query.page) || 1;
-    const skip = (page - 1) * limit;
-    let projection = { __v: 0 };
-
-    let posts = await Post.find(projection)
-        .populate({ path: "writer", select: "name.first name.last" })
-        .limit(limit)
-        .skip(skip)
-        .lean();
-
-    posts.forEach((element: any) => {
-        if (element.isAnonymous === true) {
-            element.writer = "Anonymous";
-        }
-        delete element.isAnonymous;
-    });
-
+    const limit:number= Number(req.query.limit) || 10;
+    const page :number= Number(req.query.page) || 1;
+    const skip :number = (page - 1) * limit;
+    const posts= await getPostsService(limit,skip);
     res.status(200).json({
         status: httpStatus.SUCCESS,
         data: { posts },
@@ -46,21 +32,7 @@ const searchPosts = asyncWrapper(async (req: Request, res: Response, next: NextF
     const limit = Number(req.query.limit) || 10;
     const page = Number(req.query.page) || 1;
     const skip = (page - 1) * limit;
-    let projection = { __v: 0 };
-
-    let posts = await Post.find(projection)
-        .populate({ path: "writer", select: "name.first name.last" })
-        .limit(limit)
-        .skip(skip)
-        .lean();
-
-    posts.forEach((element: any) => {
-        if (element.isAnonymous === true) {
-            element.writer = "Anonymous";
-        }
-        delete element.isAnonymous;
-    });
-
+    const posts= await searchPostsService(limit,skip);
     res.status(200).json({
         status: httpStatus.SUCCESS,
         data: { posts },
@@ -69,23 +41,14 @@ const searchPosts = asyncWrapper(async (req: Request, res: Response, next: NextF
 });
 
 const getPostById = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
-    const { id } = req.params;
-    const pos: any = await Post.findById(id, { __v: 0 })
-        .populate({ path: "writer", select: "name.first name.last" })
-        .lean();
-
-    if (pos && pos.isAnonymous === true) {
-        pos.writer = "Anonymous";
-        delete pos.isAnonymous;
-    }
-
-    if (!pos) {
+    const  id :number = Number(req.params.id);
+    const post = await getPostByIdService(id);
+    if (!post) {
         return next(new AppError(httpMessage.NOT_FOUND, 404, httpStatus.FAIL));
     }
-
     res.status(200).json({
         status: httpStatus.SUCCESS,
-        data: pos,
+        data: post,
     });
 });
 
@@ -94,23 +57,13 @@ const createPost = asyncWrapper(async (req: Request, res: Response, next: NextFu
     if (!errors.isEmpty()) {
         return next(new AppError(httpMessage.BAD_REQUEST, 400, httpStatus.FAIL, errors.array()));
     }
-
+    
     const { post, isAnonymous } = req.body;
-    const newPost: any = await Post.create({
-        post,
-        isAnonymous,
-        writer: (req as any).currentUser.id
-    });
-
-    let projection: any = { isAnonymous: 0, __v: 0 };
-    if (newPost.isAnonymous) projection.writer = 0;
-
-    const data = await Post.find({ _id: newPost.id }, projection)
-        .populate({ path: "writer", select: "name.first name.last" });
+    const createdPost = await createPostService(post,isAnonymous,(req as any).currentUser);
 
     res.status(201).json({
         status: httpStatus.SUCCESS,
-        data: data,
+        data: createdPost,
     });
 });
 
