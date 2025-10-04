@@ -32,7 +32,7 @@ let projection = { __v: 0 };
     });
     return posts;
 };
-const getPostByIdService = async (id:number) => {
+const getPostByIdService = async (id:any) => {
     const post: any = await Post.findById(id, { __v: 0 })
         .populate({ path: "writer", select: "name.first name.last" })
         .lean();

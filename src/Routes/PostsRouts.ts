@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createPost,searchPosts, getPostById, getPosts ,editWholePost, editPartPost,deletePost} from "../Controllers/PostsController.ts"; 
+import { createPost,searchPosts, getPostById, getPosts ,editPartPost,deletePost} from "../Controllers/PostsController.ts"; 
 import {createPostSchema , postQuerySchema} from "../Middlewares/validationSchemas.ts"
 import {checkIndex} from "../Middlewares/checkIndex.ts"
 import {checkSchema} from "express-validator";
@@ -14,8 +14,6 @@ router.get("/search",verifyToken,checkSchema(postQuerySchema),searchPosts)
 router.get("/:id",verifyToken,checkIndex,getPostById);
 //create a new post
 router.post("/",verifyToken,checkSchema(createPostSchema),createPost);
-//edit the whole post
-router.put("/:id",verifyToken,checkSchema(createPostSchema),editWholePost);
 //edit part of the post
 router.patch("/:id",verifyToken,allowedTo(Roles.USER),checkIndex,editPartPost);
 //delete post
