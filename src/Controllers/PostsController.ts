@@ -1,12 +1,12 @@
 import { validationResult } from "express-validator";
-import Post from "../Domain/Models/Posts.ts";
 import { asyncWrapper } from "../Middlewares/Errors/ErrorWrapper.ts";
 import * as httpStatus from "../Utils/HttpStatusText.ts";
 import * as httpMessage from "../Utils/HttpDataText.ts";
 import { AppError } from "../Utils/AppError.ts";
 import type{ Request, Response, NextFunction } from "express";
-import {getPostByIdService, getPostsService, searchPostsService,createPostService} from "../Services/postServices.ts/PostServices.ts";
+import {getPostByIdService, getPostsService, searchPostsService,createPostService,editPartPostService, deletePostService} from "../Services/postServices.ts/PostServices.ts";
 import type{ } from "../Domain/Models/Posts.ts";
+import mongoose from "mongoose";
 const getPosts = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -41,10 +41,10 @@ const searchPosts = asyncWrapper(async (req: Request, res: Response, next: NextF
 });
 
 const getPostById = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
-    const  id = req.params.id;
+    const id :string = req.params.id as string;
     const post = await getPostByIdService(id);
     if (!post) {
-        return next(new AppError(httpMessage.NOT_FOUND, 404, httpStatus.FAIL));
+        return next(new AppError("not found mother fucker", 404, httpStatus.FAIL));
     }
     res.status(200).json({
         status: httpStatus.SUCCESS,
@@ -68,20 +68,10 @@ const createPost = asyncWrapper(async (req: Request, res: Response, next: NextFu
 
 const editPartPost = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
     const { body: { post }, params: { id } } = req;
-
-
-    const pos: any = await Post.findById(id).lean();
-
-    if (!pos) {
+    const edited = await editPartPostService(id,post);
+    if (!edited) {
         return next(new AppError(httpMessage.NOT_FOUND, 404, httpStatus.FAIL));
     }
-
-    const edited: any = await Post.findByIdAndUpdate(
-        id,
-        { $set: { post } },
-        { new: true, lean: true }
-    );
-
     res.status(200).json({
         status: httpStatus.SUCCESS,
         data: edited,
@@ -90,14 +80,11 @@ const editPartPost = asyncWrapper(async (req: Request, res: Response, next: Next
 
 const deletePost = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
-    const pos: any = await Post.findById(id).lean();
 
-    if (!pos) {
+    const deleted: any = await deletePostService(id as string);
+    if (!deleted) {
         return next(new AppError(httpMessage.NOT_FOUND, 404, httpStatus.FAIL));
     }
-
-    const deleted: any = await Post.findByIdAndDelete(id).lean();
-
     res.status(200).json({
         status: httpStatus.SUCCESS,
         data: deleted,

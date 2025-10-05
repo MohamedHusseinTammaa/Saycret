@@ -4,14 +4,9 @@ import { AppError } from "../Utils/AppError.ts";
 import * as httpStatus from "../Utils/HttpStatusText.ts";
 import type { IUserJWT } from "../DTOs/users/UserJWT.ts";
 
-declare module "express-serve-static-core" {
-    interface Request {
-        currentUser?: IUserJWT;
-    }
-}
-
 export const verifyToken = (req: Request, res: Response, next: NextFunction) => {
-    const authHeader = req.headers["authorization"];
+    try{
+         const authHeader = req.headers["authorization"];
     if (!authHeader) {
         return next(new AppError("The token is required", 401, httpStatus.FAIL));
     }
@@ -23,7 +18,7 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
     const parts = authHeader.split(" ");
     if (parts.length !== 2 || !parts[1]) {
         return next(new AppError("The token is invalid", 401, httpStatus.FAIL));
-    }
+    }; 
 
     const token = parts[1];
 
@@ -31,7 +26,6 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
     if (!secret) {
         return next(new AppError("The server is not configured properly", 500, httpStatus.FAIL));
     }
-
     try {
         const decoded = Jwt.verify(token, secret) as IUserJWT;
         req.currentUser = decoded; 
@@ -39,4 +33,9 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
     } catch (err) {
         return next(new AppError("The token is invalid", 401, httpStatus.FAIL));
     }
+}
+catch(error){
+    return next(new AppError("An error occurred while verifying the token", 500, httpStatus.FAIL)); 
+}
+   
 };

@@ -9,16 +9,15 @@
     "module": "es6",            // Modern ES modules (import/export)
     "target": "es2020",            // Async/await + modern features
     "moduleResolution": "node",    // Node-style resolution
-
+    "typeRoots": ["./node_modules/@types", "./types"],
     /* Node.js Environment */
     "lib": ["esnext"],
     "types": ["node"],
-    "typeRoots": ["./node_modules/@types", "./src/types"],
     /* Output */
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
-
+    
     /* Strictness */
     "strict": true,
     "noUncheckedIndexedAccess": true,
@@ -34,6 +33,7 @@
     /* Avoids 'import type' enforcement */
     "verbatimModuleSyntax": false
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src/**/*", "types/**/*"],
+  "exclude": ["node_modules", "dist"],
+
 }

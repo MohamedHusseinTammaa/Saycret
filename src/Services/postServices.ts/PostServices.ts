@@ -1,9 +1,10 @@
+import mongoose from "mongoose";
 import Post from "../../Domain/Models/Posts.ts";
 
 const getPostsService = async (limit:number,skip:number) => {
     let projection = { __v: 0 };
     let posts = await Post.find(projection)
-        .populate({ path: "writer", select: "name.first name.last" })
+        .populate({ path: "writer", select: "name.first name.last email" })
         .limit(limit)
         .skip(skip)
         .lean();
@@ -32,14 +33,21 @@ let projection = { __v: 0 };
     });
     return posts;
 };
-const getPostByIdService = async (id:any) => {
+const getPostByIdService = async (id:string) => {
     const post: any = await Post.findById(id, { __v: 0 })
         .populate({ path: "writer", select: "name.first name.last" })
         .lean();
+    console.log(post);
+    if (!post) {
+        return null;
+    }
 
-    if (post && post.isAnonymous === true) {
-        post.writer = "Anonymous";
-        delete post.isAnonymous;
+    if (post.isAnonymous === true) {
+        return {
+            ...post,
+            writer: "Anonymous",
+            isAnonymous: undefined 
+        };
     }
     return post;
 };
@@ -57,21 +65,23 @@ const createPostService = async (post:any,isAnonymous:boolean,currentUser:any) =
         .populate({ path: "writer", select: "name.first name.last" });
     return data;
 };
-const editWholePostService = async () => {
-
+const editPartPostService = async (id:any,post: any) => {
+    const edited:any = await Post.findByIdAndUpdate(
+        id,
+        { $set: {post} },
+        { new: true, lean: true }
+    );
+    return edited;
 };
-const editPartPostService = async () => {
-
-};
-const deletePostService = async () => {
-
+const deletePostService = async (id:string) => {
+    const deleted = await Post.findByIdAndDelete(id).lean();
+    return deleted;
 };
 export {
     getPostsService,
     searchPostsService,
     getPostByIdService, 
     createPostService, 
-    editWholePostService, 
     editPartPostService, 
     deletePostService
 };
