@@ -100,33 +100,44 @@ Next priorities in development:
 
 ```bash
 Saycret/
-├── Controllers/
-│   ├── PostsController.mjs       # Handles posts-related logic
-│   └── UsersController.mjs       # Handles users-related logic
+documentation
+src
+├── Controllers
+│   ├── PostsController.ts
+│   └── UsersController.ts
 │
-├── Middlewares/
-│   ├── allowedTo.mjs             # Role-based access control
-│   ├── validationSchemas.mjs     # Request validation
-│   └── verifyToken.mjs           # JWT authentication middleware
+├── Domain
+│   ├── Interfaces
+│   │   ├── IPosts.ts
+│   │   └── IUsers.ts
+│   └── Models
+│       ├── Posts.ts
+│       └── Users.ts
 │
-├── Errors/
-│   ├── ErrorWrapper.mjs          # Error handling wrapper
+├── DTOs
 │
-├── Models/
-│   ├── Posts.mjs                 # Post schema/model
-│   └── Users.mjs                 # User schema/model
+├── Middlewares
+│   ├── Errors
+│   │   ├── allowedTo.ts
+│   │   ├── checkIndex.ts
+│   │   ├── validationSchemas.ts
+│   │   └── verifyToken.ts
 │
-├── Routes/
-│   ├── PostsRouts.mjs            # Routes for posts
-│   └── UsersRouters.mjs          # Routes for users
+├── Routes
+│   ├── PostsRouts.ts
+│   └── UsersRouters.ts
 │
-├── Utils/
-│   ├── AppError.mjs              # Custom error class
-│   ├── HttpDataText.mjs          # Constants for HTTP messages
-│   ├── HttpStatusText.mjs        # Constants for HTTP status codes
-│   └── usersRoles.mjs            # User roles definition
+├── Services
 │
-├── .env                          # Environment variables
+├── types
+│   └── express.d.ts
+│
+└── Utils
+|   ├── AppError.ts
+|   ├── HttpDataText.ts
+|   └── usersRoles.ts
+.env
+node_modules
 ├── .gitignore
 ├── index.js                      # App entry point
 ├── package.json
