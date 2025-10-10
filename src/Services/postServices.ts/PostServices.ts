@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import Post from "../../Domain/Models/Posts.ts";
-
 const getPostsService = async (limit:number,skip:number) => {
     let projection = { __v: 0 };
     let posts = await Post.find(projection)

@@ -6,7 +6,6 @@ import { AppError } from "../Utils/AppError.ts";
 import type{ Request, Response, NextFunction } from "express";
 import {getPostByIdService, getPostsService, searchPostsService,createPostService,editPartPostService, deletePostService} from "../Services/postServices.ts/PostServices.ts";
 import type{ } from "../Domain/Models/Posts.ts";
-import mongoose from "mongoose";
 const getPosts = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

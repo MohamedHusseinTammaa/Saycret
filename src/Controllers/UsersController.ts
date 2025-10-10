@@ -8,7 +8,9 @@ import * as httpStatus from "../Utils/HttpStatusText.ts";
 import * as httpMessage from "../Utils/HttpDataText.ts";
 import { AppError } from "../Utils/AppError.ts";
 import type{ Request, Response, NextFunction } from "express";
-
+import * as Services  from "../Services/userServices.ts/UserServices.ts";
+import { get } from "http";
+import { log } from "console";
 const getAllUsers = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -16,8 +18,8 @@ const getAllUsers = asyncWrapper(async (req: Request, res: Response, next: NextF
             new AppError(httpMessage.BAD_REQUEST, 400, httpStatus.FAIL, errors.array())
         );
     }
-
-    const users = await User.find().lean();
+    
+    const users = await Services.getAllUsersService();
 
     res.status(200).json({
         status: httpStatus.SUCCESS,
@@ -27,7 +29,10 @@ const getAllUsers = asyncWrapper(async (req: Request, res: Response, next: NextF
 
 const getUserById = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
-    const user: any = await User.findById(id).lean();
+    if(!id){
+        return next(new AppError(httpMessage.BAD_REQUEST, 400, httpStatus.FAIL));
+    }
+    const user: any = await Services.getUserByIdService(id);
 
     if (!user) {
         return next(new AppError(httpMessage.NOT_FOUND, 404, httpStatus.FAIL));
@@ -64,8 +69,7 @@ const register = asyncWrapper(async (req: Request, res: Response, next: NextFunc
     });
 
     try {
-        await newUser.save();
-        const user = await User.find({ _id: newUser.id }, { password: 0, __v: 0 });
+        const user: any = await Services.registerService(newUser);
         res.status(201).json({
             status: httpStatus.SUCCESS,
             data: user
@@ -80,7 +84,7 @@ const register = asyncWrapper(async (req: Request, res: Response, next: NextFunc
 
 const login = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
-    const user: any = await User.findOne({ email });
+    const user: any = await Services.loginService(email);
 
     if (!user) {
         return next(new AppError("email and password doesn't match", 400, httpStatus.FAIL));
@@ -116,8 +120,10 @@ const editUser = asyncWrapper(async (req: Request, res: Response, next: NextFunc
 
     const { id } = req.params;
     const { body } = req;
-
-    const updated: any = await User.findByIdAndUpdate(id, { $set: body }, { new: true }).lean();
+    if(!id||!body){
+        return next(new AppError(httpMessage.BAD_REQUEST, 400, httpStatus.FAIL));
+    }
+    const updated: any = await Services.editUserService(id, body);
 
     if (!updated) {
         return next(new AppError(httpMessage.NOT_FOUND, 404, httpStatus.FAIL));
@@ -131,13 +137,14 @@ const editUser = asyncWrapper(async (req: Request, res: Response, next: NextFunc
 
 const deleteUser = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
-    const user: any = await User.findById(id).lean();
+    if(!id){
+        return next(new AppError(httpMessage.BAD_REQUEST, 400, httpStatus.FAIL));
+    }
+    const deleted: any = await Services.deleteUserService(id);
 
-    if (!user) {
+    if (!deleted) {
         return next(new AppError(httpMessage.NOT_FOUND, 404, httpStatus.FAIL));
     }
-
-    const deleted: any = await User.findByIdAndDelete(id).lean();
 
     res.status(200).json({
         status: httpStatus.SUCCESS,
