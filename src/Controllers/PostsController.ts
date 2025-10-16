@@ -4,7 +4,7 @@ import * as httpStatus from "../Utils/HttpStatusText.ts";
 import * as httpMessage from "../Utils/HttpDataText.ts";
 import { AppError } from "../Utils/AppError.ts";
 import type{ Request, Response, NextFunction } from "express";
-import {getPostByIdService, getPostsService, searchPostsService,createPostService,editPartPostService, deletePostService} from "../Services/postServices.ts/PostServices.ts";
+import {getPostByIdService, getPostsService, searchPostsService,createPostService,editPartPostService, deletePostService,likePostService, dislikePostService,removeInteractionPostService} from "../Services/postServices.ts/PostServices.ts";
 import type{ } from "../Domain/Models/Posts.ts";
 const getPosts = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
@@ -85,16 +85,50 @@ const deletePost = asyncWrapper(async (req: Request, res: Response, next: NextFu
         return next(new AppError(httpMessage.NOT_FOUND, 404, httpStatus.FAIL));
     }
     res.status(200).json({
-        status: httpStatus.SUCCESS,
         data: deleted,
     });
 });
-
+const likePost = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    if(!req.currentUser||!req.currentUser.id){
+        return next(new AppError("you must be logged in to Interact", 401, httpStatus.FAIL));
+    }
+    const liked: boolean = await likePostService(id as string, req.currentUser.id as string);
+    if (!liked) {
+        return next(new AppError(httpMessage.BAD_REQUEST, 400, httpStatus.FAIL));
+    }   
+    res.status(200).end();
+});
+const disLikePost = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    if(!req.currentUser||!req.currentUser.id){
+        return next(new AppError("you must be logged in to Interact", 401, httpStatus.FAIL));
+    }
+    const done: boolean = await dislikePostService(id as string, req.currentUser.id as string);
+    if (!done) {
+        return next(new AppError(httpMessage.BAD_REQUEST, 400, httpStatus.FAIL));
+    }   
+    res.status(200).end();
+});
+const removeInteractionPost = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    if(!req.currentUser||!req.currentUser.id){
+        return next(new AppError("you must be logged in to Interact", 401, httpStatus.FAIL));
+    }
+    const done: boolean = await removeInteractionPostService(id as string, req.currentUser.id as string);
+    if (!done) {
+        return next(new AppError(httpMessage.BAD_REQUEST, 400, httpStatus.FAIL));
+    }   
+    res.status(200).end();
+});
 export {
     getPosts,
     searchPosts,
     getPostById,
     createPost,
     editPartPost,
-    deletePost
+    deletePost,
+    likePost,
+    disLikePost,
+    removeInteractionPost
 };

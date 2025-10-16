@@ -1,5 +1,8 @@
 import mongoose from "mongoose";
 import Post from "../../Domain/Models/Posts.ts";
+import Interaction from "../../Domain/Models/Interactions.ts";
+import { truncate } from "fs";
+import User from "../../Domain/Models/Users.ts";
 const getPostsService = async (limit:number,skip:number) => {
     let projection = { __v: 0 };
     let posts = await Post.find(projection)
@@ -76,11 +79,134 @@ const deletePostService = async (id:string) => {
     const deleted = await Post.findByIdAndDelete(id).lean();
     return deleted;
 };
+const likePostService = async (postId: string, userId: string) => {
+    // Validate ObjectIds
+    if (!mongoose.Types.ObjectId.isValid(postId) || !mongoose.Types.ObjectId.isValid(userId)) {
+        return false;
+    }
+
+    // Use findOne instead of find to get a single document (or null)
+    const interaction = await Interaction.findOne({ post: postId, User: userId });
+
+    if (interaction) {
+        // If already liked, don't do anything
+        if (interaction.status) {
+            return false;
+        }
+        // Update existing interaction to liked
+        await Interaction.updateOne(
+            { post: postId, User: userId },
+            { status: true }
+        );
+        // Increment likes only after successful interaction update/create
+        const post = await Post.findByIdAndUpdate(
+            postId,
+            { $inc: { likes: 2 } },
+            { new: true, lean: true }
+        );
+        if (!post) {
+        return false;
+        }
+
+        return true;
+
+    } else {
+        // Create new interaction with status true
+        await Interaction.create({
+            post: postId,
+            User: userId,
+            status: true
+        });
+        // Increment likes only after successful interaction update/create
+        const post = await Post.findByIdAndUpdate(
+            postId,
+            { $inc: { likes: 1 } },
+            { new: true, lean: true }
+        );
+
+        if (!post) {
+            return false;
+        }
+
+        return true;
+    }
+};
+const dislikePostService = async (postId: string, userId: string) => {
+    // Validate ObjectIds
+    if (!mongoose.Types.ObjectId.isValid(postId) || !mongoose.Types.ObjectId.isValid(userId)) {
+        return false;
+    }
+
+    // Find existing interaction
+    const interaction = await Interaction.findOne({ post: postId, User: userId });
+
+    // Can only dislike if the user previously liked the post
+    if (!interaction || !interaction.status) {
+        return false; // No interaction exists OR already disliked
+    }
+    else if(interaction.status){
+        await Interaction.updateOne(
+            { post: postId, User: userId },
+            { status: false }
+        );
+        // Decrement likes count
+        const post = await Post.findByIdAndUpdate(
+            postId,
+            { $inc: { likes: -2 } },
+            { new: true, lean: true }
+        );
+        return true;
+    }
+
+    // create interaction (unlike)
+    await Interaction.create(
+        { post: postId, User: userId, status: false }
+    );
+
+    // Decrement likes count
+    const post = await Post.findByIdAndUpdate(
+        postId,
+        { $inc: { likes: -1 } },
+        { new: true, lean: true }
+    );
+
+    if (!post) {
+        return false;
+    }
+
+    return true;
+};
+
+const removeInteractionPostService = async (postId: string, userId: string) => {
+    if (!mongoose.Types.ObjectId.isValid(postId) || !mongoose.Types.ObjectId.isValid(userId)) {
+        return false;
+    }
+    const interaction = await Interaction.findOne({ post: postId, User: userId });
+    if(interaction){
+        const removed :any = await Interaction.findOneAndDelete({post:postId,User:userId},{lean:true});
+        if(removed.status===true){
+            await Post.findByIdAndUpdate(postId,{$inc:{likes:-1}})
+        }
+        else{
+            await Post.findByIdAndUpdate(postId,{$inc:{likes:1}})
+        }
+        await interaction
+        return true;
+    }
+
+    return false; 
+};
+
+
+
 export {
     getPostsService,
     searchPostsService,
     getPostByIdService, 
     createPostService, 
     editPartPostService, 
-    deletePostService
+    deletePostService,
+    likePostService,
+    dislikePostService,
+    removeInteractionPostService
 };
