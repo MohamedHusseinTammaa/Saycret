@@ -4,7 +4,7 @@ import * as httpStatus from "../Utils/HttpStatusText.ts";
 import * as httpMessage from "../Utils/HttpDataText.ts";
 import { AppError } from "../Utils/AppError.ts";
 import type{ Request, Response, NextFunction } from "express";
-import {getPostByIdService, getPostsService, searchPostsService,createPostService,editPartPostService, deletePostService,likePostService, dislikePostService,removeInteractionPostService} from "../Services/postServices.ts/PostServices.ts";
+import {getPostByIdService, getPostsService, searchPostsService,createPostService,editPartPostService, deletePostService,likePostService, dislikePostService,removeInteractionPostService, getProfilePostsService} from "../Services/postServices.ts/PostServices.ts";
 import type{ } from "../Domain/Models/Posts.ts";
 const getPosts = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
@@ -121,6 +121,22 @@ const removeInteractionPost = asyncWrapper(async (req: Request, res: Response, n
     }   
     res.status(200).end();
 });
+const getProfilePosts = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
+    const {id} = req.params;
+      const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return next(new AppError(httpMessage.BAD_REQUEST, 400, httpStatus.FAIL, errors.array()));
+    }
+    const limit:number= Number(req.query.limit) || 10;
+    const page :number= Number(req.query.page) || 1;
+    const skip :number = (page - 1) * limit;
+    const posts = await getProfilePostsService(id as string ,limit,skip);
+    res.status(200).json({
+        status: httpStatus.SUCCESS,
+        data: { posts },
+        pagination: { limit, page }
+    });
+});
 export {
     getPosts,
     searchPosts,
@@ -130,5 +146,6 @@ export {
     deletePost,
     likePost,
     disLikePost,
-    removeInteractionPost
+    removeInteractionPost,
+    getProfilePosts
 };

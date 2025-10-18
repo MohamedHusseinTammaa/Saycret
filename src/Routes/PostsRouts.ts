@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createPost,searchPosts, getPostById, getPosts ,editPartPost,deletePost,likePost, disLikePost, removeInteractionPost} from "../Controllers/PostsController.ts"; 
+import { createPost,searchPosts, getPostById, getPosts ,editPartPost,deletePost,likePost, disLikePost, removeInteractionPost, getProfilePosts} from "../Controllers/PostsController.ts"; 
 import {createPostSchema , postQuerySchema} from "../Middlewares/validationSchemas.ts"
 import {checkIndex} from "../Middlewares/checkIndex.ts"
 import {checkSchema} from "express-validator";
@@ -11,13 +11,15 @@ const router = Router();
 //Get all posts
 router.get("/",verifyToken,getPosts);
 router.get("/search",verifyToken,checkSchema(postQuerySchema),searchPosts)
+//get users posts 
+router.get("/profile/:id",verifyToken,getProfilePosts);
 //Get all posts by id
 router.get("/:id",verifyToken,checkIndex,getPostById);
 //like post
 router.post("/like/:id",verifyToken,checkIndex,likePost);
 //dislike post
 router.post("/dislike/:id",verifyToken,checkIndex,disLikePost);
-//
+//remove interaction
 router.post("/removeInteraction/:id",verifyToken,checkIndex,removeInteractionPost);
 //create a new post
 router.post("/",verifyToken,checkSchema(createPostSchema),createPost);
