@@ -30,10 +30,15 @@ This project was developed following **Agile principles**:
 - Implemented Authentication & Authorization
 - Completed Stories: Register (#1), Login (#2)
 
-### Sprint 2 (🚀 In Progress)
+### Sprint 2 (✅ Completed)
 - Focus on Post, Profile, Like/Dislike features
 - Planned Stories: Post (#3), Enter Profile (#4), Like/Dislike (#5)
+
+### Sprint 3 (in progress)
+- Focus on Comments
+- Planned Stories: As a user I want to comment , As a user I want  to like/dislike comment
 ---
+
 The project is still under development. Upcoming features will be implemented based on the prioritized user stories.
 ### Planned
 - User profile management  
