@@ -196,7 +196,20 @@ const removeInteractionPostService = async (postId: string, userId: string) => {
 
     return false; 
 };
+const getProfilePostsService= async (id: string ,limit:number,skip:number )=>{
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return;
+    }
+    let projection = { __v: 0 , isAnonymous:0};
+    let posts = await Post.find({writer:id,isAnonymous:{$ne:true}},projection)
+        .populate({ path: "writer", select: "name.first name.last" })
+        .limit(limit)
+        .skip(skip)
+        .lean();
+    
 
+    return posts;
+};
 
 
 export {
@@ -208,5 +221,6 @@ export {
     deletePostService,
     likePostService,
     dislikePostService,
-    removeInteractionPostService
+    removeInteractionPostService,
+    getProfilePostsService
 };
