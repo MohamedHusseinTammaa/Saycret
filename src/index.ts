@@ -1,4 +1,4 @@
-import Express from "express";
+import express from "express";
 import type { NextFunction, Request, Response } from "express";
 import { router as PostsRouter } from "./Routes/PostsRouts.ts";
 import { router as usersRouter } from "./Routes/UsersRouters.ts";
@@ -8,7 +8,8 @@ import * as httpMessages from "./Utils/HttpDataText.ts";
 import cors from "cors";
 import 'dotenv/config';
 import mongoose from "mongoose";
-
+import multer from "multer";
+import path from "path";
 // Ensure environment variables are defined
 const url = process.env.DB_URL;
 if (!url) {
@@ -20,11 +21,14 @@ mongoose.connect(url)
     .catch(err => console.error("MongoDB connection error:", err));
 
 const port = process.env.PORT ? Number(process.env.PORT) : 5000;
-const app = Express();
+const app = express();
+
 
 // Middlewares
 app.use(cors());
-app.use(Express.json());
+app.use(express.json());
+app.use('/uploads', express.static(path.join( 'uploads')));
+
 
 // Routes
 app.use("/api/posts", PostsRouter);

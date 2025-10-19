@@ -45,6 +45,10 @@ const usersSchema = new mongoose.Schema({
         type: String,
         enum : [...Object.values(Roles)],
         default :Roles.USER
+    },
+    avatar :{
+        type : String,
+        default: "uploads/gun.png"
     }
 
 });

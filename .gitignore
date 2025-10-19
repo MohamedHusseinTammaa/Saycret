@@ -6,7 +6,8 @@ node_modules/
 
 # Ignore OS files
 .DS_Store
-
+# Ignore uploads
+uploads
 # Ignore your output repo files
 *.txt
 

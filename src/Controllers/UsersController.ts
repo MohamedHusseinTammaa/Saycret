@@ -50,7 +50,7 @@ const register = asyncWrapper(async (req: Request, res: Response, next: NextFunc
         return next(new AppError(httpMessage.BAD_REQUEST, 400, httpStatus.FAIL, errors.array()));
     }
 
-    let { name: { first, last }, userName, dateOfBirth, gender, phoneNumber, email, password, role } = req.body;
+    let { name: { first, last }, userName, dateOfBirth, gender, phoneNumber, email, password, role,avatar } = req.body;
     if (dateOfBirth) {
         const [day, month, year] = dateOfBirth.split("-");
         dateOfBirth = new Date(year, month - 1, day);
@@ -65,7 +65,8 @@ const register = asyncWrapper(async (req: Request, res: Response, next: NextFunc
         phoneNumber,
         email,
         password: hashedPassword,
-        role
+        role,
+        avatar : req.file?.filename
     });
 
     try {
