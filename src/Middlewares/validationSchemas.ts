@@ -23,6 +23,30 @@ export const createPostSchema = {
         }
     }
 };
+export const createCommentSchema = {
+    post : {
+        notEmpty : {
+             errorMessage: "need the post id"
+        }
+    },
+    content: {
+        isString: {
+            errorMessage: "post must be string!"
+        },
+        notEmpty: {
+            errorMessage: "you need to write a post"
+        },
+        isLength: {
+            options: { min: 5, max: 300 },
+            errorMessage: "the length from 5-300 characters"
+        }
+    },
+    isAnonymous: {
+        isBoolean: {
+            errorMessage: "isAnonymous must be true or false"
+        }
+    }
+};
 
 export const postQuerySchema = {
     writer: {

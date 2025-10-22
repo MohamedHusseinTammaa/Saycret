@@ -3,6 +3,7 @@ import Post from "../../Domain/Models/Posts.ts";
 import Interaction from "../../Domain/Models/Interactions.ts";
 import { truncate } from "fs";
 import User from "../../Domain/Models/Users.ts";
+import Comment from "../../Domain/Models/Comments.ts"
 const getPostsService = async (limit:number,skip:number) => {
     let projection = { __v: 0 };
     let posts = await Post.find(projection)
@@ -176,7 +177,6 @@ const dislikePostService = async (postId: string, userId: string) => {
 
     return true;
 };
-
 const removeInteractionPostService = async (postId: string, userId: string) => {
     if (!mongoose.Types.ObjectId.isValid(postId) || !mongoose.Types.ObjectId.isValid(userId)) {
         return false;
@@ -210,7 +210,29 @@ const getProfilePostsService= async (id: string ,limit:number,skip:number )=>{
 
     return posts;
 };
-
+const getPostCommentsService= async (id: string ,limit:number,skip:number )=>{
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return;
+    }
+    let projection = { __v: 0 , isAnonymous:0};
+    let posts = await Comment.find({post:id,isAnonymous:{$ne:true}},projection)
+        .populate({ path: "writer", select: "name.first name.last" })
+        .limit(limit)
+        .skip(skip)
+        .lean();
+    return posts
+};
+const addCommentService = async (postId: string , writerId : string , content:string,isAnonymous:boolean)=>{
+    if (!mongoose.Types.ObjectId.isValid(postId)||!mongoose.Types.ObjectId.isValid(writerId)){
+        return null;
+    }
+    const  created = await Comment.create({post:postId,content:content,isAnonymous:isAnonymous,writer:writerId});
+    let projection: any = { isAnonymous: 0, __v: 0 };
+    if (created.isAnonymous) projection.writer = 0;
+    const data = Comment.find({_id:created.id},projection)
+    .populate({path:"writer",select: "name.first name.last"});
+    return data;
+}
 
 export {
     getPostsService,
@@ -222,5 +244,7 @@ export {
     likePostService,
     dislikePostService,
     removeInteractionPostService,
-    getProfilePostsService
+    getProfilePostsService,
+    getPostCommentsService,
+    addCommentService
 };
