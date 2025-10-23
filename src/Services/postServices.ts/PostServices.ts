@@ -4,9 +4,10 @@ import Interaction from "../../Domain/Models/Interactions.ts";
 import { truncate } from "fs";
 import User from "../../Domain/Models/Users.ts";
 import Comment from "../../Domain/Models/Comments.ts"
+import { response } from "express";
 const getPostsService = async (limit:number,skip:number) => {
-    let projection = { __v: 0 };
-    let posts = await Post.find(projection)
+    let projection = { __v: 0 ,deleted:0 };
+    let posts = await Post.find({deleted:{$ne:true}},projection)
         .populate({ path: "writer", select: "name.first name.last email" })
         .limit(limit)
         .skip(skip)
@@ -21,7 +22,6 @@ const getPostsService = async (limit:number,skip:number) => {
 };
 const searchPostsService = async (limit:number,skip:number) => {
 let projection = { __v: 0 };
-
     let posts = await Post.find(projection)
         .populate({ path: "writer", select: "name.first name.last" })
         .limit(limit)
@@ -37,7 +37,7 @@ let projection = { __v: 0 };
     return posts;
 };
 const getPostByIdService = async (id:string) => {
-    const post: any = await Post.findById(id, { __v: 0 })
+    const post: any = await Post.find({_id:id,deleted:{$ne:true}}, { __v: 0,deleted :0 })
         .populate({ path: "writer", select: "name.first name.last" })
         .lean();
     console.log(post);
@@ -62,7 +62,7 @@ const createPostService = async (post:any,isAnonymous:boolean,currentUser:any) =
         writer:currentUser.id
     });
 
-    let projection: any = { isAnonymous: 0, __v: 0 };
+    let projection: any = { isAnonymous: 0, __v: 0,deleted:0 };
     if (newPost.isAnonymous) projection.writer = 0;
     const data = await Post.find({ _id: newPost.id }, projection)
         .populate({ path: "writer", select: "name.first name.last" });
@@ -71,13 +71,13 @@ const createPostService = async (post:any,isAnonymous:boolean,currentUser:any) =
 const editPartPostService = async (id:any,post: any) => {
     const edited:any = await Post.findByIdAndUpdate(
         id,
-        { $set: {post} },
+        { $set: {post:post , edited :true} },
         { new: true, lean: true }
     );
     return edited;
 };
 const deletePostService = async (id:string) => {
-    const deleted = await Post.findByIdAndDelete(id).lean();
+    const deleted = await Post.findByIdAndUpdate(id, {deleted:true}).lean();
     return deleted;
 };
 const likePostService = async (postId: string, userId: string) => {
@@ -231,7 +231,67 @@ const addCommentService = async (postId: string , writerId : string , content:st
     if (created.isAnonymous) projection.writer = 0;
     const data = Comment.find({_id:created.id},projection)
     .populate({path:"writer",select: "name.first name.last"});
+    const post =Post.findByIdAndUpdate(postId , {$inc:{comments:1}});
+    if(!post)return null;
     return data;
+}
+const deleteCommentService = async (commentId: string )=>{
+    if (!mongoose.Types.ObjectId.isValid(commentId)){
+        return null;
+    }
+    const data = await Comment.findOneAndUpdate(
+        { _id: commentId },
+        { $set: { deleted: true } },
+        { 
+          new: true,
+          select: '_id content writer createdAt isAnonymous',
+          lean: true
+        }
+    ).populate({ path: "writer", select: "name.first name.last email" });
+    
+    if(!data)return null;
+    
+    let writer;
+    if (data) {
+        writer =data.isAnonymous ? "Anonymous":data.writer;
+    }
+    const post =Post.findByIdAndUpdate(commentId , {$inc:{comments:-1}});
+    
+    if(!post)return null;
+    return {
+        _id: data._id,
+        content: data.content,
+        createdAt: data.createdAt,
+        writer: writer,
+    };
+}
+const updateCommentService = async (commentId: string , updatedContent:string)=>{
+    if (!mongoose.Types.ObjectId.isValid(commentId)){
+        return null;
+    }
+    const data = await Comment.findOneAndUpdate(
+        { _id: commentId },
+        { $set: { content: updatedContent,edited:true} },
+        { 
+          new: true,
+          select: '_id content writer createdAt isAnonymous',
+          lean: true
+        }
+    ).populate({ path: "writer", select: "name.first name.last " });
+    
+    if(!data)return null;
+    
+    let writer;
+    if (data) {
+        writer =data.isAnonymous ? "Anonymous":data.writer;
+    }
+    
+    return {
+        _id: data._id,
+        content: updatedContent,
+        createdAt: data.createdAt,
+        writer: writer,
+    };
 }
 
 export {
@@ -246,5 +306,7 @@ export {
     removeInteractionPostService,
     getProfilePostsService,
     getPostCommentsService,
-    addCommentService
+    addCommentService,
+    deleteCommentService,
+    updateCommentService
 };

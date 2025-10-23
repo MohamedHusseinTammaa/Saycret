@@ -24,13 +24,19 @@ const postschema = new mongoose.Schema({
         type : Number,
         default : 0
     },
-    dislikes : {
+    comments: {
         type : Number,
         default : 0
     },
-    commentsCount : {
-        type : Number,
-        default : 0
+    deleted :{
+        type: Boolean,
+        required : true,
+        default : false
+    },
+    edited: {
+        type:Boolean,
+        required :true,
+        default : false
     }
     
 });

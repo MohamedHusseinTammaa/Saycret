@@ -4,7 +4,7 @@ import * as httpStatus from "../Utils/HttpStatusText.ts";
 import * as httpMessage from "../Utils/HttpDataText.ts";
 import { AppError } from "../Utils/AppError.ts";
 import type{ Request, Response, NextFunction } from "express";
-import {getPostByIdService, getPostsService, searchPostsService,createPostService,editPartPostService, deletePostService,likePostService, dislikePostService,removeInteractionPostService, getProfilePostsService, getPostCommentsService, addCommentService} from "../Services/postServices.ts/PostServices.ts";
+import {getPostByIdService, getPostsService, searchPostsService,createPostService,editPartPostService, deletePostService,likePostService, dislikePostService,removeInteractionPostService, getProfilePostsService, getPostCommentsService, addCommentService, deleteCommentService} from "../Services/postServices.ts/PostServices.ts";
 import type{ } from "../Domain/Models/Posts.ts";
 const getPosts = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
@@ -21,7 +21,6 @@ const getPosts = asyncWrapper(async (req: Request, res: Response, next: NextFunc
         pagination: { limit, page }
     });
 });
-
 const searchPosts = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -38,7 +37,6 @@ const searchPosts = asyncWrapper(async (req: Request, res: Response, next: NextF
         pagination: { limit, page },
     });
 });
-
 const getPostById = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
     const id :string = req.params.id as string;
     const post = await getPostByIdService(id);
@@ -50,7 +48,6 @@ const getPostById = asyncWrapper(async (req: Request, res: Response, next: NextF
         data: post,
     });
 });
-
 const createPost = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -63,8 +60,6 @@ const createPost = asyncWrapper(async (req: Request, res: Response, next: NextFu
         data: createdPost,
     });
 });
-
-
 const editPartPost = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
     const { body: { post }, params: { id } } = req;
     const edited = await editPartPostService(id,post);
@@ -76,7 +71,6 @@ const editPartPost = asyncWrapper(async (req: Request, res: Response, next: Next
         data: edited,
     });
 });
-
 const deletePost = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
 
@@ -169,6 +163,16 @@ const addComment = asyncWrapper(async (req: Request, res: Response, next: NextFu
         data: addedComment,
     });
 });
+const deleteComment = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
+    const {id} = req.params;
+    if(!id)return next(new AppError(httpMessage.NOT_VALID,400,httpStatus.FAIL));
+    const deletedComment = await deleteCommentService(id);
+    if(!deletedComment)return next(new AppError(httpMessage.NOT_FOUND,404,httpStatus.NOT_FOUND))
+    res.status(200).json({
+        status: httpStatus.SUCCESS,
+        data: deletedComment,
+    });
+});
 export {
     getPosts,
     searchPosts,
@@ -181,5 +185,6 @@ export {
     removeInteractionPost,
     getProfilePosts,
     getPostComments,
-    addComment
+    addComment,
+    deleteComment
 };
