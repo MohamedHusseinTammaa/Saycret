@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import Post from "../../Domain/Models/Posts.ts";
 import Interaction from "../../Domain/Models/Interactions.ts";
-import { truncate } from "fs";
+import { truncate, write } from "fs";
 import User from "../../Domain/Models/Users.ts";
 import Comment from "../../Domain/Models/Comments.ts"
 import { response } from "express";
@@ -214,13 +214,23 @@ const getPostCommentsService= async (id: string ,limit:number,skip:number )=>{
     if (!mongoose.Types.ObjectId.isValid(id)) {
         return;
     }
-    let projection = { __v: 0 , isAnonymous:0};
-    let posts = await Comment.find({post:id,isAnonymous:{$ne:true}},projection)
+    let projection = { __v: 0 ,deleted:0};
+    let posts : any = await Comment.find({post:id,deleted:{$ne:true}},projection)
         .populate({ path: "writer", select: "name.first name.last" })
         .limit(limit)
         .skip(skip)
         .lean();
-    return posts
+    if(!posts) return null;
+    posts =posts.map((element:any)=>{
+        if(element.isAnonymous===true){
+            return {
+                ...element,
+                writer:"Anonymous"
+            }
+        }
+        return element;
+    });
+    return posts;
 };
 const addCommentService = async (postId: string , writerId : string , content:string,isAnonymous:boolean)=>{
     if (!mongoose.Types.ObjectId.isValid(postId)||!mongoose.Types.ObjectId.isValid(writerId)){

@@ -4,7 +4,7 @@ import * as httpStatus from "../Utils/HttpStatusText.ts";
 import * as httpMessage from "../Utils/HttpDataText.ts";
 import { AppError } from "../Utils/AppError.ts";
 import type{ Request, Response, NextFunction } from "express";
-import {getPostByIdService, getPostsService, searchPostsService,createPostService,editPartPostService, deletePostService,likePostService, dislikePostService,removeInteractionPostService, getProfilePostsService, getPostCommentsService, addCommentService, deleteCommentService} from "../Services/postServices.ts/PostServices.ts";
+import {getPostByIdService, getPostsService, searchPostsService,createPostService,editPartPostService, deletePostService,likePostService, dislikePostService,removeInteractionPostService, getProfilePostsService, getPostCommentsService, addCommentService, deleteCommentService, updateCommentService} from "../Services/postServices.ts/PostServices.ts";
 import type{ } from "../Domain/Models/Posts.ts";
 const getPosts = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
@@ -137,7 +137,7 @@ const getPostComments = asyncWrapper(async (req: Request, res: Response, next: N
     const page :number= Number(req.query.page) || 1;
     const skip :number = (page - 1) * limit;
     const comments = await getPostCommentsService(id as string ,limit,skip);
-    if(!comments) return (new AppError("nigga",404,httpStatus.NOT_FOUND));
+    if(!comments) return (new AppError(httpMessage.NOT_FOUND,404,httpStatus.NOT_FOUND));
     res.status(200).json({
         status: httpStatus.SUCCESS,
         data: { comments },
@@ -173,6 +173,17 @@ const deleteComment = asyncWrapper(async (req: Request, res: Response, next: Nex
         data: deletedComment,
     });
 });
+const updateComment = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
+    const {id} = req.params;
+    const {content} = req.body;
+    if(!id)return next(new AppError(httpMessage.NOT_VALID,400,httpStatus.FAIL));
+    const updatedComment = await updateCommentService(id,content);
+    if(!updatedComment)return next(new AppError(httpMessage.NOT_FOUND,404,httpStatus.NOT_FOUND))
+    res.status(200).json({
+        status: httpStatus.SUCCESS,
+        data: updatedComment
+    });
+});
 export {
     getPosts,
     searchPosts,
@@ -186,5 +197,6 @@ export {
     getProfilePosts,
     getPostComments,
     addComment,
-    deleteComment
+    deleteComment,
+    updateComment
 };

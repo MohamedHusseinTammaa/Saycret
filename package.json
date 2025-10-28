@@ -16,7 +16,7 @@
   "name": "express",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "start": "node src/index.ts",
     "dev" : "nodemon src/index.ts",
