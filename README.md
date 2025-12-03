@@ -34,9 +34,11 @@ This project was developed following **Agile principles**:
 - Focus on Post, Profile, Like/Dislike features
 - Planned Stories: Post (#3), Enter Profile (#4), Like/Dislike (#5)
 
-### Sprint 3 (in progress)
+### Sprint 3 (✅ Completed)
 - Focus on Comments
 - Planned Stories: As a user I want to comment , As a user I want  to like/dislike comment
+
+### Sprint 3 ( i)
 ---
 
 The project is still under development. Upcoming features will be implemented based on the prioritized user stories.
@@ -56,22 +58,21 @@ The project is still under development. Upcoming features will be implemented ba
 
 During the analysis phase, the system was broken down into **user stories**, each assigned **story points** (effort/complexity) and a **priority** score (business value).  
 
-| User Story | Story Points | Priority |
-|------------|--------------|----------|
-| As a user I want to register | 1 | 100 |
-| As a user I want to login | 1 | 100 |
-| As a user I want to post | 1 | 100 |
-| As a user I want to enter my profile | 4 | 100 |
-| As a user I want to like/dislike posts | 1 | 90 |
+| User Story | Story Points | Priority | progress |
+|------------|--------------|----------|----------|
+| As a user I want to register | 1 | 100 | ✅ |
+| As a user I want to login | 1 | 100 |✅|
+| As a user I want to post | 1 | 100 |✅|
+| As a user I want to enter my profile | 4 | 100 |✅|
+| As a user I want to like/dislike posts | 1 | 90 |✅|
 | As a user I want to repost | 2 | 90 |
-| As a user I want to comment | 2 | 90 |
+| As a user I want to comment | 2 | 90 |✅|
 | As a user I want to follow other accounts | 2 | 90 |
 | As a user I want to search other users | 4 | 90 |
 | As a user I want to unfollow other users | 1 | 85 |
 | As a user I want to see my posts | 1 | 85 |
 | As a user I want to edit my profile | 2 | 85 |
-| As a user I want  to like/dislike comment | 1 | 80 |
-| As a user I want to post (duplicate story) | 2 | 80 |
+| As a user I want  to like/dislike comment | 1 | 80 |✅|
 | As a user I want to see followers number | 1 | 70 |
 | As a user I don’t want to see bad words or attitudes | 1 | 70 |
 | As a user I want to report a user | 1 | 60 |
