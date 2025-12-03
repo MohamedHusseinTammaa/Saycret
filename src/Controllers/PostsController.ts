@@ -4,7 +4,7 @@ import * as httpStatus from "../Utils/HttpStatusText.ts";
 import * as httpMessage from "../Utils/HttpDataText.ts";
 import { AppError } from "../Utils/AppError.ts";
 import type{ Request, Response, NextFunction } from "express";
-import {getPostByIdService, getPostsService, searchPostsService,createPostService,editPartPostService, deletePostService,likePostService, dislikePostService,removeInteractionPostService, getProfilePostsService, getPostCommentsService, addCommentService, deleteCommentService, updateCommentService, likeCommentService, dislikeCommentService, removeInteractionCommentService} from "../Services/postServices.ts/PostServices.ts";
+import {getPostByIdService, getPostsService, searchPostsService,createPostService,editPartPostService, deletePostService,likePostService, dislikePostService,removeInteractionPostService, getProfilePostsService} from "../Services/postServices.ts/PostServices.ts";
 import type{ } from "../Domain/Models/Posts.ts";
 const getPosts = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);

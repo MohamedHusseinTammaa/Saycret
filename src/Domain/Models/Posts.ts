@@ -15,6 +15,14 @@ const postschema = new mongoose.Schema({
         required : true,
         default : Date.now
     },
+    updatedAt:{
+        type : Date,
+        default:null
+    },
+    deletedAt:{
+        type : Date,
+        default : null
+    },
     isAnonymous :{
         type : Boolean,
         required: true,
