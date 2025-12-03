@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     /* File Layout */
+    
     "rootDir": "./src",
     "outDir": "./dist",
     "allowImportingTsExtensions": true,
@@ -12,7 +13,7 @@
     "typeRoots": ["./node_modules/@types", "./types"],
     /* Node.js Environment */
     "lib": ["esnext"],
-    "types": ["node"],
+    "types": ["node","jest"],
     /* Output */
     "sourceMap": true,
     "declaration": true,
@@ -22,7 +23,7 @@
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
-
+        // tsconfig.json
     /* Interop & Compatibility */
     "esModuleInterop": true,
     "skipLibCheck": true,

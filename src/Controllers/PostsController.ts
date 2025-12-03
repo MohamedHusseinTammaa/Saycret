@@ -4,7 +4,7 @@ import * as httpStatus from "../Utils/HttpStatusText.ts";
 import * as httpMessage from "../Utils/HttpDataText.ts";
 import { AppError } from "../Utils/AppError.ts";
 import type{ Request, Response, NextFunction } from "express";
-import {getPostByIdService, getPostsService, searchPostsService,createPostService,editPartPostService, deletePostService,likePostService, dislikePostService,removeInteractionPostService, getProfilePostsService, getPostCommentsService, addCommentService, deleteCommentService, updateCommentService} from "../Services/postServices.ts/PostServices.ts";
+import {getPostByIdService, getPostsService, searchPostsService,createPostService,editPartPostService, deletePostService,likePostService, dislikePostService,removeInteractionPostService, getProfilePostsService, getPostCommentsService, addCommentService, deleteCommentService, updateCommentService, likeCommentService, dislikeCommentService, removeInteractionCommentService} from "../Services/postServices.ts/PostServices.ts";
 import type{ } from "../Domain/Models/Posts.ts";
 const getPosts = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
@@ -131,59 +131,7 @@ const getProfilePosts = asyncWrapper(async (req: Request, res: Response, next: N
         pagination: { limit, page }
     });
 });
-const getPostComments = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
-    const {id} = req.params;
-    const limit:number= Number(req.query.limit) || 10;
-    const page :number= Number(req.query.page) || 1;
-    const skip :number = (page - 1) * limit;
-    const comments = await getPostCommentsService(id as string ,limit,skip);
-    if(!comments) return (new AppError(httpMessage.NOT_FOUND,404,httpStatus.NOT_FOUND));
-    res.status(200).json({
-        status: httpStatus.SUCCESS,
-        data: { comments },
-        pagination: { limit, page }
-    });
-});
-const addComment = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return next(new AppError(httpMessage.BAD_REQUEST, 400, httpStatus.FAIL, errors.array()));
-    }
-    const { content,post, isAnonymous } = req.body;
-    const writerId= req.currentUser?.id;
-    if(!writerId)
-        return next(new AppError("you must be logged in to Interact", 401, httpStatus.FAIL));
-    
-    const addedComment = await addCommentService(post,writerId,content,isAnonymous);
-    if(!addedComment) 
-        return (new AppError(httpMessage.NOT_VALID,400,httpStatus.FAIL));
-    
-    res.status(201).json({
-        status: httpStatus.SUCCESS,
-        data: addedComment,
-    });
-});
-const deleteComment = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
-    const {id} = req.params;
-    if(!id)return next(new AppError(httpMessage.NOT_VALID,400,httpStatus.FAIL));
-    const deletedComment = await deleteCommentService(id);
-    if(!deletedComment)return next(new AppError(httpMessage.NOT_FOUND,404,httpStatus.NOT_FOUND))
-    res.status(200).json({
-        status: httpStatus.SUCCESS,
-        data: deletedComment,
-    });
-});
-const updateComment = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
-    const {id} = req.params;
-    const {content} = req.body;
-    if(!id)return next(new AppError(httpMessage.NOT_VALID,400,httpStatus.FAIL));
-    const updatedComment = await updateCommentService(id,content);
-    if(!updatedComment)return next(new AppError(httpMessage.NOT_FOUND,404,httpStatus.NOT_FOUND))
-    res.status(200).json({
-        status: httpStatus.SUCCESS,
-        data: updatedComment
-    });
-});
+
 export {
     getPosts,
     searchPosts,
@@ -195,8 +143,4 @@ export {
     disLikePost,
     removeInteractionPost,
     getProfilePosts,
-    getPostComments,
-    addComment,
-    deleteComment,
-    updateComment
 };

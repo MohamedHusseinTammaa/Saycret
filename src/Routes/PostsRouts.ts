@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createPost,searchPosts, getPostById, getPosts ,editPartPost,deletePost,likePost, disLikePost, removeInteractionPost, getProfilePosts, getPostComments, addComment, deleteComment, updateComment} from "../Controllers/PostsController.ts"; 
+import { createPost,searchPosts, getPostById, getPosts ,editPartPost,deletePost,likePost, disLikePost, removeInteractionPost, getProfilePosts} from "../Controllers/PostsController.ts"; 
 import {createCommentSchema, createPostSchema , postQuerySchema} from "../Middlewares/validationSchemas.ts"
 import {checkIndex} from "../Middlewares/checkIndex.ts"
 import {checkSchema} from "express-validator";
@@ -15,14 +15,6 @@ router.get("/search",verifyToken,checkSchema(postQuerySchema),searchPosts)
 router.get("/profile/:id",verifyToken,getProfilePosts);
 //Get all posts by id
 router.get("/:id",verifyToken,checkIndex,getPostById);
-//Get post comments 
-router.get("/comments/:id",verifyToken,checkIndex,getPostComments)
-//update comment
-router.patch("/comments/:id",verifyToken,checkIndex,updateComment)
-//add a comment
-router.post("/comments",verifyToken,checkSchema(createCommentSchema),addComment)
-//delete a comment 
-router.delete("/comments",verifyToken,checkIndex,deleteComment)
 //like post
 router.post("/like/:id",verifyToken,checkIndex,likePost);
 //dislike post

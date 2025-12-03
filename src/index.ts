@@ -2,6 +2,7 @@ import express from "express";
 import type { NextFunction, Request, Response } from "express";
 import { router as PostsRouter } from "./Routes/PostsRouts.ts";
 import { router as usersRouter } from "./Routes/UsersRouters.ts";
+import { router as commentsRouter } from "./Routes/CommentsRouts.ts";
 import { AppError } from "./Utils/AppError.ts";
 import * as httpStatus from "./Utils/HttpStatusText.ts";
 import * as httpMessages from "./Utils/HttpDataText.ts";
@@ -32,6 +33,7 @@ app.use('/uploads', express.static(path.join( 'uploads')));
 
 // Routes
 app.use("/api/posts", PostsRouter);
+app.use("/api/comment", commentsRouter);
 app.use("/api/users", usersRouter);
 
 // 404 handler

@@ -4,216 +4,39 @@ import Interaction from "../../Domain/Models/Interactions.ts";
 import { truncate, write } from "fs";
 import User from "../../Domain/Models/Users.ts";
 import Comment from "../../Domain/Models/Comments.ts"
-import { response } from "express";
-const getPostsService = async (limit:number,skip:number) => {
-    let projection = { __v: 0 ,deleted:0 };
-    let posts = await Post.find({deleted:{$ne:true}},projection)
-        .populate({ path: "writer", select: "name.first name.last email" })
-        .limit(limit)
-        .skip(skip)
-        .lean();
-    posts.forEach((element: any) => {
-        if (element.isAnonymous === true) {
-            element.writer = "Anonymous";
-        }
-        delete element.isAnonymous;
-    });
-    return posts;
-};
-const searchPostsService = async (limit:number,skip:number) => {
-let projection = { __v: 0 };
-    let posts = await Post.find(projection)
-        .populate({ path: "writer", select: "name.first name.last" })
-        .limit(limit)
-        .skip(skip)
-        .lean();
 
-    posts.forEach((element: any) => {
-        if (element.isAnonymous === true) {
-            element.writer = "Anonymous";
-        }
-        delete element.isAnonymous;
-    });
-    return posts;
-};
-const getPostByIdService = async (id:string) => {
-    const post: any = await Post.find({_id:id,deleted:{$ne:true}}, { __v: 0,deleted :0 })
-        .populate({ path: "writer", select: "name.first name.last" })
-        .lean();
-    console.log(post);
-    if (!post) {
+const getCommentByIdService = async (id: string) => {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
         return null;
     }
 
-    if (post.isAnonymous === true) {
+    const projection = { __v: 0, deleted: 0 };
+
+    const comment: any = await Comment.findOne(
+        { _id: id, deleted: { $ne: true } },
+        projection
+    )
+
+    .lean();
+
+    if (!comment) return false;
+
+    if (comment.isAnonymous === true) {
         return {
-            ...post,
-            writer: "Anonymous",
-            isAnonymous: undefined 
+            ...comment,
+            writer:"Anonymous"
         };
     }
-    return post;
+
+    return comment;
 };
-const createPostService = async (post:any,isAnonymous:boolean,currentUser:any) => {
 
-    const newPost: any = await Post.create({
-        post,
-        isAnonymous,
-        writer:currentUser.id
-    });
 
-    let projection: any = { isAnonymous: 0, __v: 0,deleted:0 };
-    if (newPost.isAnonymous) projection.writer = 0;
-    const data = await Post.find({ _id: newPost.id }, projection)
-        .populate({ path: "writer", select: "name.first name.last" });
-    return data;
-};
-const editPartPostService = async (id:any,post: any) => {
-    const edited:any = await Post.findByIdAndUpdate(
-        id,
-        { $set: {post:post , edited :true} },
-        { new: true, lean: true }
-    );
-    return edited;
-};
-const deletePostService = async (id:string) => {
-    const deleted = await Post.findByIdAndUpdate(id, {deleted:true}).lean();
-    return deleted;
-};
-const likePostService = async (postId: string, userId: string) => {
-    // Validate ObjectIds
-    if (!mongoose.Types.ObjectId.isValid(postId) || !mongoose.Types.ObjectId.isValid(userId)) {
-        return false;
-    }
-
-    // Use findOne instead of find to get a single document (or null)
-    const interaction = await Interaction.findOne({ post: postId, User: userId });
-
-    if (interaction) {
-        // If already liked, don't do anything
-        if (interaction.status) {
-            return false;
-        }
-        // Update existing interaction to liked
-        await Interaction.updateOne(
-            { post: postId, User: userId },
-            { status: true }
-        );
-        // Increment likes only after successful interaction update/create
-        const post = await Post.findByIdAndUpdate(
-            postId,
-            { $inc: { likes: 2 } },
-            { new: true, lean: true }
-        );
-        if (!post) {
-        return false;
-        }
-
-        return true;
-
-    } else {
-        // Create new interaction with status true
-        await Interaction.create({
-            post: postId,
-            User: userId,
-            status: true
-        });
-        // Increment likes only after successful interaction update/create
-        const post = await Post.findByIdAndUpdate(
-            postId,
-            { $inc: { likes: 1 } },
-            { new: true, lean: true }
-        );
-
-        if (!post) {
-            return false;
-        }
-
-        return true;
-    }
-};
-const dislikePostService = async (postId: string, userId: string) => {
-    // Validate ObjectIds
-    if (!mongoose.Types.ObjectId.isValid(postId) || !mongoose.Types.ObjectId.isValid(userId)) {
-        return false;
-    }
-
-    // Find existing interaction
-    const interaction = await Interaction.findOne({ post: postId, User: userId });
-
-    // Can only dislike if the user previously liked the post
-    if (!interaction || !interaction.status) {
-        return false; // No interaction exists OR already disliked
-    }
-    else if(interaction.status){
-        await Interaction.updateOne(
-            { post: postId, User: userId },
-            { status: false }
-        );
-        // Decrement likes count
-        const post = await Post.findByIdAndUpdate(
-            postId,
-            { $inc: { likes: -2 } },
-            { new: true, lean: true }
-        );
-        return true;
-    }
-
-    // create interaction (unlike)
-    await Interaction.create(
-        { post: postId, User: userId, status: false }
-    );
-
-    // Decrement likes count
-    const post = await Post.findByIdAndUpdate(
-        postId,
-        { $inc: { likes: -1 } },
-        { new: true, lean: true }
-    );
-
-    if (!post) {
-        return false;
-    }
-
-    return true;
-};
-const removeInteractionPostService = async (postId: string, userId: string) => {
-    if (!mongoose.Types.ObjectId.isValid(postId) || !mongoose.Types.ObjectId.isValid(userId)) {
-        return false;
-    }
-    const interaction = await Interaction.findOne({ post: postId, User: userId });
-    if(interaction){
-        const removed :any = await Interaction.findOneAndDelete({post:postId,User:userId},{lean:true});
-        if(removed.status===true){
-            await Post.findByIdAndUpdate(postId,{$inc:{likes:-1}})
-        }
-        else{
-            await Post.findByIdAndUpdate(postId,{$inc:{likes:1}})
-        }
-        await interaction
-        return true;
-    }
-
-    return false; 
-};
-const getProfilePostsService= async (id: string ,limit:number,skip:number )=>{
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-        return;
-    }
-    let projection = { __v: 0 , isAnonymous:0};
-    let posts = await Post.find({writer:id,isAnonymous:{$ne:true}},projection)
-        .populate({ path: "writer", select: "name.first name.last" })
-        .limit(limit)
-        .skip(skip)
-        .lean();
-    
-
-    return posts;
-};
 const getPostCommentsService= async (id: string ,limit:number,skip:number )=>{
     if (!mongoose.Types.ObjectId.isValid(id)) {
         return;
     }
+
     let projection = { __v: 0 ,deleted:0};
     let posts : any = await Comment.find({post:id,deleted:{$ne:true}},projection)
         .populate({ path: "writer", select: "name.first name.last" })
@@ -427,22 +250,14 @@ const removeInteractionCommentService = async (commentId: string, userId: string
     return false; 
 };
 
+
 export {
-    getPostsService,
-    searchPostsService,
-    getPostByIdService, 
-    createPostService, 
-    editPartPostService, 
-    deletePostService,
-    likePostService,
-    dislikePostService,
-    removeInteractionPostService,
-    getProfilePostsService,
     getPostCommentsService,
     addCommentService,
     deleteCommentService,
     updateCommentService,
     likeCommentService,
     dislikeCommentService,
-    removeInteractionCommentService
+    removeInteractionCommentService,
+    getCommentByIdService
 };

@@ -34,7 +34,12 @@ const CommentSchema = new mongoose.Schema({
         type: Boolean,
         required:true,
         default: false
+    },
+    likes :{
+        type : Number,
+        default: 0
     }
+
 });
 const PostModel = mongoose.model("Comments",CommentSchema,"Comments");
 export default PostModel;
