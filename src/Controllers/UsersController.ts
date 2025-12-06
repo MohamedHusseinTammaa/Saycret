@@ -94,6 +94,21 @@ const login = asyncWrapper(async (req: Request, res: Response, next: NextFunctio
     const passwordMatched = await bcrypt.compare(password, user.password);
 
     if (passwordMatched) {
+       if (user.deleted) {
+          if (Date.now() <= user.restoreUntil.getTime()) {
+            
+            const restored = await Services.restoreDeletedUserService(user._id);
+            if (!restored) {
+              return next(new AppError("Invalid email or password", 401, httpStatus.FAIL));
+            }
+          } else {
+            
+            return next(
+              new AppError("Your account can no longer be restored", 403, httpStatus.FAIL)
+            );
+          }
+        }
+
         const token = Jwt.sign({ email: user.email, id: user.id, role: user.role , jti: crypto.randomUUID(), }, process.env.JWT_KEY!);
         return res.status(200).json({
             status: httpStatus.SUCCESS,
@@ -154,23 +169,31 @@ const editUser = asyncWrapper(async (req: Request, res: Response, next: NextFunc
     });
 });
 
-const deleteUser = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
-    const { id } = req.params;
-    if(!id){
+const deleteUser = asyncWrapper(async (req:Request, res:Response, next:NextFunction) => {
+    const  id  = req.currentUser?.id;
+    if (!id) {
         return next(new AppError(httpMessage.BAD_REQUEST, 400, httpStatus.FAIL));
     }
-    const deleted: any = await Services.deleteUserService(id);
+    const deleted = await Services.deleteUserService(id);
 
     if (!deleted) {
         return next(new AppError(httpMessage.NOT_FOUND, 404, httpStatus.FAIL));
     }
+    const token = req.currentUser
+    if(!token)return next(new AppError(httpMessage.BAD_REQUEST, 400, httpStatus.FAIL));
+    console.log({ tokenJTI: token.jti });
+
+    const data = await Services.blockSessionService(token.jti);
+    if(!data) return next(new AppError(httpMessage.ERROR, 500, httpStatus.ERROR));
 
     res.status(200).json({
         status: httpStatus.SUCCESS,
         data: deleted,
+        token:data,
+        days : "you have 30 days to restore your account",
+        restore_until :deleted.restoreUntil
     });
 });
-
 export {
     getAllUsers,
     getUserById,

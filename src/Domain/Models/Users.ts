@@ -49,6 +49,16 @@ const usersSchema = new mongoose.Schema({
     avatar :{
         type : String,
         default: "uploads/gun.png"
+    },
+    deletedAt:{
+        type:Date
+    },
+    restoreUntil:{
+        type:Date
+    },
+    deleted:{
+        type :Boolean,
+        default:false
     }
 
 });

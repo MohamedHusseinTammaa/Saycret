@@ -16,6 +16,6 @@ router.get("/:id",verifyToken,checkIndex,getUserById);
 router.post("/register",upload.single("avatar"),checkSchema(addUserSchema),register);
 router.post("/login",checkSchema(loginUserSchema),login);
 router.patch('/:id',verifyToken,allowedTo(Roles.ADMIN,Roles.MANAGER,Roles.USER),checkIndex,editUser);
-router.delete('/:id',verifyToken,allowedTo(Roles.ADMIN,Roles.MANAGER,Roles.USER),checkIndex,deleteUser);
+router.delete('/',verifyToken,allowedTo(Roles.ADMIN,Roles.MANAGER,Roles.USER),deleteUser);
 router.post("/logout",verifyToken,allowedTo(Roles.ADMIN,Roles.MANAGER,Roles.USER),logout)
 export{router} 

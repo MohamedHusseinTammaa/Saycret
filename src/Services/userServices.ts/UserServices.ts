@@ -25,9 +25,27 @@ const editUserService = async (id:string,user:any) => {
  return await User.findByIdAndUpdate(id, { $set: user }, { new: true }).lean();
 };
 const deleteUserService = async (id:string) => {
-    return await User.findByIdAndDelete(id).lean();
+    const deleted = await User.findByIdAndUpdate(id,{
+        deleted:true,
+        deletedAt: Date.now(),
+        restoreUntil: Date.now() + 30 * 24 * 60 * 60 * 1000
+    },{ new: true });
+    return deleted;
 };
+const restoreDeletedUserService= async(id:string)=>{
+    const user = await User.findById(id);
 
+    if (!user) return ;
+    if (!user.deletedAt || !user.restoreUntil) return ;
+    if (Date.now() > user.restoreUntil.getTime()) return ;
+    user.deletedAt = null;
+    user.restoreUntil = null;
+    user.deleted=false;
+
+    await user.save();
+    return user;
+    
+}
 export {
     getAllUsersService,
     getUserByIdService,
@@ -35,5 +53,6 @@ export {
     loginService,
     editUserService,
     deleteUserService,
-    blockSessionService
+    blockSessionService,
+    restoreDeletedUserService
 };
