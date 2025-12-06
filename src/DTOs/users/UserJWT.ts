@@ -3,4 +3,7 @@ export interface IUserJWT {
     id: string;
     role: string;
     allowed:boolean;
+    jti: string;     
+    iat: number;
+    exp: number;
 }

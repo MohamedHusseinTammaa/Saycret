@@ -1,3 +1,4 @@
+import blackListedTokenModel from "../../Domain/Models/blackListedTokens.ts";
 import User from "../../Domain/Models/Users.ts";
 
 const getAllUsersService = async () => {
@@ -14,6 +15,12 @@ const registerService = async (newUser:any) => {
 const loginService = async (email:string) => {
     return await User.findOne({ email });
 };
+const blockSessionService = async (id:string) => {
+    return await blackListedTokenModel.create({
+        tokenId: id,
+        expiresAt: new Date(Date.now())
+    });
+};
 const editUserService = async (id:string,user:any) => {
  return await User.findByIdAndUpdate(id, { $set: user }, { new: true }).lean();
 };
@@ -27,5 +34,6 @@ export {
     registerService,
     loginService,
     editUserService,
-    deleteUserService
+    deleteUserService,
+    blockSessionService
 };

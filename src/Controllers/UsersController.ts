@@ -94,7 +94,7 @@ const login = asyncWrapper(async (req: Request, res: Response, next: NextFunctio
     const passwordMatched = await bcrypt.compare(password, user.password);
 
     if (passwordMatched) {
-        const token = Jwt.sign({ email: user.email, id: user.id, role: user.role }, process.env.JWT_KEY!);
+        const token = Jwt.sign({ email: user.email, id: user.id, role: user.role , jti: crypto.randomUUID(), }, process.env.JWT_KEY!);
         return res.status(200).json({
             status: httpStatus.SUCCESS,
             data: user.email,
@@ -110,7 +110,25 @@ const login = asyncWrapper(async (req: Request, res: Response, next: NextFunctio
         details: null
     });
 });
+const logout = asyncWrapper(async (req:Request, res:Response, next:NextFunction) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return next(
+            new AppError(httpMessage.BAD_REQUEST, 400, httpStatus.FAIL, errors.array())
+        );
+    }
+    const token = req.currentUser
+    if(!token)return next(new AppError(httpMessage.BAD_REQUEST, 400, httpStatus.FAIL));
+    console.log({ tokenJTI: token.jti });
 
+    const data = await Services.blockSessionService(token.jti);
+    if(!data) return next(new AppError(httpMessage.ERROR, 500, httpStatus.ERROR));
+    res.status(200).json({
+        status: httpStatus.SUCCESS,
+        data: data,
+        message: "logged out successfully"
+    });
+});
 const editUser = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -159,5 +177,6 @@ export {
     register,
     editUser,
     login,
-    deleteUser
+    deleteUser,
+    logout 
 };

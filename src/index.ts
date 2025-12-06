@@ -9,9 +9,8 @@ import * as httpMessages from "./Utils/HttpDataText.ts";
 import cors from "cors";
 import 'dotenv/config';
 import mongoose from "mongoose";
-import multer from "multer";
 import path from "path";
-// Ensure environment variables are defined
+
 const url = process.env.DB_URL;
 if (!url) {
     throw new Error("MONGODB URL is not defined in .env");
