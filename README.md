@@ -38,7 +38,10 @@ This project was developed following **Agile principles**:
 - Focus on Comments
 - Planned Stories: As a user I want to comment , As a user I want  to like/dislike comment
 
-### Sprint 3 ( i)
+### Sprint 4 ( in progress)
+- Follow Other Accounts
+- Unfollow Other Users
+- Search Other Users
 ---
 
 The project is still under development. Upcoming features will be implemented based on the prioritized user stories.
