@@ -194,6 +194,38 @@ const deleteUser = asyncWrapper(async (req:Request, res:Response, next:NextFunct
         restore_until :deleted.restoreUntil
     });
 });
+
+const getUserFollowersById = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    if(!id){
+        return next(new AppError(httpMessage.BAD_REQUEST, 400, httpStatus.FAIL));
+    }
+    const limit:number= Number(req.query.limit) || 10;
+    const page :number= Number(req.query.page) || 1;
+    const skip :number = (page - 1) * limit;
+
+    const followers = await Services.getUserFollowersByIdService(id,limit,skip);
+
+    res.status(200).json({
+        status: httpStatus.SUCCESS,
+        data: followers,
+    });
+});
+
+const followUserById = asyncWrapper(async (req:Request, res:Response, next:NextFunction) => {
+    const followedId  = req.params.id;
+    const followerId = req.currentUser?.id;
+    if (!followerId||!followedId||followerId===followedId) {
+        return next(new AppError(httpMessage.BAD_REQUEST, 400, httpStatus.FAIL));
+    }
+    const followed = Services.followService(followerId,followedId)
+    if(!followed)
+        return next(new AppError(httpMessage.NOT_ALLOWED,405,httpStatus.NOT_ALLOWED));
+    res.status(200).json({
+        status: httpStatus.SUCCESS,
+        data : "followed"
+    });
+});
 export {
     getAllUsers,
     getUserById,
@@ -201,5 +233,7 @@ export {
     editUser,
     login,
     deleteUser,
-    logout 
+    logout,
+    followUserById,
+    getUserFollowersById
 };

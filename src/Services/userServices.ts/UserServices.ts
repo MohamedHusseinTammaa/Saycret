@@ -1,4 +1,5 @@
 import blackListedTokenModel from "../../Domain/Models/blackListedTokens.ts";
+import Follows from "../../Domain/Models/Follows.ts";
 import User from "../../Domain/Models/Users.ts";
 
 const getAllUsersService = async () => {
@@ -46,6 +47,43 @@ const restoreDeletedUserService= async(id:string)=>{
     return user;
     
 }
+const followService = async(followerId:string,followedId:string)=>{
+    const existingFollow = await Follows.findOne({
+      followerId: followerId,
+      followedId: followedId,
+    });
+
+    if (existingFollow) {
+      return; 
+    }
+    await User.findByIdAndUpdate(
+            followedId,
+            { $inc: { followersCount:1 } }
+    );
+    await User.findByIdAndUpdate(
+            followerId,
+            { $inc: { followingCount:1 } }
+    );
+    await Follows.create({
+      followerId: followerId,
+      followedId: followedId,
+      createdAt: Date.now()
+    });
+    return true;
+
+}
+
+const getUserFollowersByIdService = async (userId:string,limit:number,skip:number) => {
+    let projection = { __v: 0 };
+    let followers = await Follows.find({followedId:userId},projection)
+        .populate({ path: "followerId", select: "name.first name.last email" })
+        .limit(limit)
+        .skip(skip)
+        .lean();
+
+    return followers;
+};
+
 export {
     getAllUsersService,
     getUserByIdService,
@@ -54,5 +92,7 @@ export {
     editUserService,
     deleteUserService,
     blockSessionService,
-    restoreDeletedUserService
+    restoreDeletedUserService,
+    followService,
+    getUserFollowersByIdService
 };
