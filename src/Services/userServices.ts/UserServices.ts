@@ -51,10 +51,10 @@ const followService = async(followerId:string,followedId:string)=>{
     const existingFollow = await Follows.findOne({
       followerId: followerId,
       followedId: followedId,
-    });
+    }).lean();
 
     if (existingFollow) {
-      return; 
+      return null ; 
     }
     await User.findByIdAndUpdate(
             followedId,
@@ -72,6 +72,36 @@ const followService = async(followerId:string,followedId:string)=>{
     return true;
 
 }
+const unfollowService = async (followerId: string, followedId: string) => {
+    const existingFollow = await Follows.findOne({
+      followerId: followerId,
+      followedId: followedId,
+    });
+  
+    if (!existingFollow) {
+      return; 
+    }
+  
+    // Remove the follow record
+    await Follows.deleteOne({
+      followerId: followerId,
+      followedId: followedId,
+    });
+  
+    // Decrement follower/following counts
+    await User.findByIdAndUpdate(
+      followedId,
+      { $inc: { followersCount: -1 } }
+    );
+  
+    await User.findByIdAndUpdate(
+      followerId,
+      { $inc: { followingCount: -1 } }
+    );
+  
+    return true;
+  };
+  
 
 const getUserFollowersByIdService = async (userId:string,limit:number,skip:number) => {
     let projection = { __v: 0 };
@@ -94,5 +124,6 @@ export {
     blockSessionService,
     restoreDeletedUserService,
     followService,
-    getUserFollowersByIdService
+    getUserFollowersByIdService,
+    unfollowService
 };

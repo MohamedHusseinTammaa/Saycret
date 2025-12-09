@@ -226,6 +226,30 @@ const followUserById = asyncWrapper(async (req:Request, res:Response, next:NextF
         data : "followed"
     });
 });
+
+const unfollowUserById = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
+    const followedId = req.params.id;
+    const followerId = req.currentUser?.id;
+
+    // Validate input
+    if (!followerId || !followedId || followerId === followedId) {
+        return next(new AppError(httpMessage.BAD_REQUEST, 400, httpStatus.FAIL));
+    }
+
+    // Call service
+    const unfollowed = await Services.unfollowService(followerId, followedId);
+
+    if (!unfollowed) {
+        return next(new AppError(httpMessage.NOT_ALLOWED, 405, httpStatus.NOT_ALLOWED));
+    }
+
+    // Response
+    res.status(200).json({
+        status: httpStatus.SUCCESS,
+        data: "unfollowed"
+    });
+});
+
 export {
     getAllUsers,
     getUserById,
@@ -235,5 +259,6 @@ export {
     deleteUser,
     logout,
     followUserById,
-    getUserFollowersById
+    getUserFollowersById,
+    unfollowUserById
 };
