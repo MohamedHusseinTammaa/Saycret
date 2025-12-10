@@ -114,6 +114,16 @@ const getUserFollowersByIdService = async (userId:string,limit:number,skip:numbe
     return followers;
 };
 
+const searchUsersService = async (query: string) => {
+  if (!query || query.trim() === "") return [];
+
+  const users = await User.find(
+    { $text: { $search: query } },
+    { score: { $meta: "textScore" } } // projection to return relevance score
+  ).sort({ score: { $meta: "textScore" } });
+
+  return users;
+};
 export {
     getAllUsersService,
     getUserByIdService,
@@ -125,5 +135,6 @@ export {
     restoreDeletedUserService,
     followService,
     getUserFollowersByIdService,
-    unfollowService
+    unfollowService,
+    searchUsersService
 };

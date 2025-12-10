@@ -63,6 +63,9 @@ const usersSchema = new mongoose.Schema({
 
 });
 
+usersSchema.index({
+    username:'text'
+});
 
 usersSchema.virtual("fullName").get(function () {
     if(!this.name || !this.name.first || !this.name.last) return null;

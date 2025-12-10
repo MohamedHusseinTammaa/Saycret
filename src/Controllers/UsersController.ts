@@ -249,6 +249,22 @@ const unfollowUserById = asyncWrapper(async (req: Request, res: Response, next: 
         data: "unfollowed"
     });
 });
+const searchUsers = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
+  const q = req.query.q as string;
+
+  if (!q) {
+    return next(new AppError(httpMessage.BAD_REQUEST, 400, httpStatus.FAIL));
+  }
+
+  const users = await Services.searchUsersService(q);
+
+  res.status(200).json({
+    status: httpStatus.SUCCESS,
+    results: users.length,
+    data: users
+  });
+});
+
 
 export {
     getAllUsers,
@@ -260,5 +276,6 @@ export {
     logout,
     followUserById,
     getUserFollowersById,
-    unfollowUserById
+    unfollowUserById,
+    searchUsers
 };
