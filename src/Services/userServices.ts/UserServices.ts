@@ -2,8 +2,11 @@ import blackListedTokenModel from "../../Domain/Models/blackListedTokens.ts";
 import Follows from "../../Domain/Models/Follows.ts";
 import User from "../../Domain/Models/Users.ts";
 
-const getAllUsersService = async () => {
-    return await User.find().lean();
+const getAllUsersService = async (limit: number, skip: number) => {
+    return await User.find()
+        .limit(limit)
+        .skip(skip)
+        .lean();
 };
 const getUserByIdService = async (id:string) => {
     return await User.findById(id).lean()
@@ -114,13 +117,21 @@ const getUserFollowersByIdService = async (userId:string,limit:number,skip:numbe
     return followers;
 };
 
-const searchUsersService = async (query: string) => {
+const searchUsersService = async (query: string, limit: number, skip: number) => {
   if (!query || query.trim() === "") return [];
-
-  const users = await User.find(
-    { $text: { $search: query } },
-    { score: { $meta: "textScore" } } // projection to return relevance score
-  ).sort({ score: { $meta: "textScore" } });
+  
+  const regex = new RegExp(query.trim(), "i");
+  // Search for users where first name, last name, email, or userName contains the query (partial match, case-insensitive)
+  const users = await User.find({
+    $or: [
+      { "name.first": regex },
+      { "name.last": regex },
+      { userName: regex }
+    ]
+  })
+  .limit(limit)
+  .skip(skip)
+  .lean();
 
   return users;
 };

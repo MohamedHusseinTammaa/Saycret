@@ -18,12 +18,17 @@ const getAllUsers = asyncWrapper(async (req: Request, res: Response, next: NextF
             new AppError(httpMessage.BAD_REQUEST, 400, httpStatus.FAIL, errors.array())
         );
     }
+
+    const limit: number = Number(req.query.limit) || 10;
+    const page: number = Number(req.query.page) || 1;
+    const skip: number = (page - 1) * limit;
     
-    const users = await Services.getAllUsersService();
+    const users = await Services.getAllUsersService(limit, skip);
 
     res.status(200).json({
         status: httpStatus.SUCCESS,
         data: { users },
+        pagination: { limit, page }
     });
 });
 
@@ -250,19 +255,28 @@ const unfollowUserById = asyncWrapper(async (req: Request, res: Response, next: 
     });
 });
 const searchUsers = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
-  const q = req.query.q as string;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return next(new AppError(httpMessage.BAD_REQUEST, 400, httpStatus.FAIL, errors.array()));
+    }
 
-  if (!q) {
-    return next(new AppError(httpMessage.BAD_REQUEST, 400, httpStatus.FAIL));
-  }
+    const query = (req.query.q as string)?.trim();
+  
+    if (!query) {
+        return next(new AppError(httpMessage.BAD_REQUEST, 400, httpStatus.FAIL));
+    }
 
-  const users = await Services.searchUsersService(q);
+    const limit: number = Number(req.query.limit) || 10;
+    const page: number = Number(req.query.page) || 1;
+    const skip: number = (page - 1) * limit;
+  
+    const users = await Services.searchUsersService(query, limit, skip);
 
-  res.status(200).json({
-    status: httpStatus.SUCCESS,
-    results: users.length,
-    data: users
-  });
+    return res.status(200).json({
+        status: httpStatus.SUCCESS,
+        data: { users },
+        pagination: { limit, page }
+    });
 });
 
 

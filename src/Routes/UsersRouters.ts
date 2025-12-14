@@ -12,7 +12,7 @@ import {upload} from "../Middlewares/upload.ts";
 const router = Router();
 
 router.get("/",verifyToken,allowedTo(Roles.MANAGER,Roles.ADMIN),getAllUsers);
-router.get("/",verifyToken,checkIndex,searchUsers);
+router.get("/search",verifyToken,searchUsers);
 router.get("/:id",verifyToken,checkIndex,getUserById);
 router.post("/register",upload.single("avatar"),checkSchema(addUserSchema),register);
 router.post("/login",checkSchema(loginUserSchema),login);

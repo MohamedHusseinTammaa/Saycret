@@ -41,7 +41,7 @@ const getPostById = asyncWrapper(async (req: Request, res: Response, next: NextF
     const id :string = req.params.id as string;
     const post = await getPostByIdService(id);
     if (!post) {
-        return next(new AppError("not found mother fucker", 404, httpStatus.FAIL));
+        return next(new AppError(httpMessage.NOT_FOUND, 404, httpStatus.FAIL));
     }
     res.status(200).json({
         status: httpStatus.SUCCESS,
