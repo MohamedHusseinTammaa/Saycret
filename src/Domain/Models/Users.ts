@@ -8,7 +8,14 @@ const usersSchema = new mongoose.Schema({
     },
     userName: {
         type: String,
-        required: true
+        required: true,
+        unique: true,
+        minlength: 5,
+        maxlength: 32,
+        trim: true,
+        lowercase: true,
+        validate : [validator.isAlphanumeric,"feild must be a valid username"],
+        match : [/^[a-zA-Z0-9]+$/,"feild must be a valid username"]
     },
     dateOfBirth: {
         type: Date
@@ -17,7 +24,14 @@ const usersSchema = new mongoose.Schema({
         type: Boolean // false = male, true = female
     },
     phoneNumber: {
-        type: String
+        type: String,
+        required: true,
+        unique: true,
+        validate : [validator.isMobilePhone,"feild must be a valid phone number"],
+        match : [/^[0-9]+$/,"feild must be a valid phone number"],
+        minlength: 10,
+        maxlength: 15,
+        trim: true
     },
     email: {
         type: String,
@@ -27,7 +41,12 @@ const usersSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required : true
+        required : true,
+        minlength: 8,
+        maxlength: 32,
+        trim: true,
+        validate : [validator.isStrongPassword,"password must be a strong password"],
+        match : [/^[a-zA-Z0-9]+$/,"password must be a valid password"]
     },
     followersCount: {
         type: Number,
