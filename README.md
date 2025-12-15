@@ -63,23 +63,40 @@ During the analysis phase, the system was broken down into **user stories**, eac
 
 | User Story | Story Points | Priority | progress |
 |------------|--------------|----------|----------|
+| As a user I want to see a feed of posts | 2 | 100 | ⬜ |
+| As a user I want to see posts from people I follow | 2 | 95 | ⬜ |
+| As a user I want to see the latest posts first | 1 | 85 | ⬜ |
+| As a user I want to refresh my feed | 1 | 80 | ⬜ |
+| As a user I want to see popular posts | 2 | 75 | ⬜ |
+| As a user I want my feed to exclude blocked users | 1 | 75 | ⬜ |
+| As a user I want to load more posts | 2 | 80 | ⬜ |
 | As a user I want to register | 1 | 100 | ✅ |
-| As a user I want to login | 1 | 100 |✅|
-| As a user I want to post | 1 | 100 |✅|
-| As a user I want to enter my profile | 4 | 100 |✅|
-| As a user I want to like/dislike posts | 1 | 90 |✅|
-| As a user I want to repost | 2 | 90 |
-| As a user I want to comment | 2 | 90 |✅|
-| As a user I want to follow other accounts | 2 | 90 |
-| As a user I want to search other users | 4 | 90 |
-| As a user I want to unfollow other users | 1 | 85 |
-| As a user I want to see my posts | 1 | 85 |
-| As a user I want to edit my profile | 2 | 85 |
-| As a user I want  to like/dislike comment | 1 | 80 |✅|
-| As a user I want to see followers number | 1 | 70 |
-| As a user I don’t want to see bad words or attitudes | 1 | 70 |
-| As a user I want to report a user | 1 | 60 |
-| As a user I want to report a post | 1 | 60 |
+| As a user I want to login | 1 | 100 | ✅ |
+| As a user I want to logout | 1 | 95 | ✅ |
+| As a user I want to post | 1 | 100 | ✅ |
+| As a user I want to see my posts | 1 | 85 | ✅ |
+| As a user I want to comment | 2 | 90 | ✅ |
+| As a user I want to like/dislike posts | 1 | 90 | ✅ |
+| As a user I want to like/dislike comments | 1 | 80 | ✅ |
+| As a user I want to enter my profile | 4 | 100 | ✅ |
+| As a user I want to edit my profile | 2 | 85 | ⬜ |
+| As a user I want to follow other accounts | 2 | 90 | ✅ |
+| As a user I want to unfollow other users | 1 | 85 | ✅ |
+| As a user I want to see followers number | 1 | 70 | ✅ |
+| As a user I want to search other users | 4 | 90 | ✅ |
+| As a user I want to edit my post | 2 | 85 | ✅ |
+| As a user I want to delete my post | 1 | 90 | ✅ |
+| As a user I want to delete my comment | 1 | 80 | ✅ |
+| As a user I want to see who liked my post | 2 | 85 | ✅ |
+| As a user I want to receive notifications | 3 | 90 | ⬜ |
+| As a user I want offensive words to be filtered | 1 | 70 | ⬜ |
+| As a user I want to block another user | 2 | 75 | ⬜ |
+| As a user I want to mute another user | 1 | 70 | ⬜ |
+| As a user I want to report a user | 1 | 60 | ⬜ |
+| As a user I want to report a post | 1 | 60 | ⬜ |
+| As an admin I want to review reported content | 3 | 60 | ⬜ |
+
+
 
 This prioritization guided the decision to implement **authentication and authorization first** as the project’s foundation.  
 
@@ -112,25 +129,16 @@ Saycret/
 documentation
 src
 ├── Controllers
-│   ├── PostsController.ts
-│   └── UsersController.ts
-│
+|
 ├── Domain
 │   ├── Interfaces
-│   │   ├── IPosts.ts
-│   │   └── IUsers.ts
+│   │   
 │   └── Models
-│       ├── Posts.ts
-│       └── Users.ts
-│
+│       
 ├── DTOs
 │
 ├── Middlewares
 │   ├── Errors
-│   │   ├── allowedTo.ts
-│   │   ├── checkIndex.ts
-│   │   ├── validationSchemas.ts
-│   │   └── verifyToken.ts
 │
 ├── Routes
 │   ├── PostsRouts.ts
@@ -138,13 +146,8 @@ src
 │
 ├── Services
 │
-├── types
-│   └── express.d.ts
-│
 └── Utils
-|   ├── AppError.ts
-|   ├── HttpDataText.ts
-|   └── usersRoles.ts
+|
 .env
 node_modules
 ├── .gitignore
