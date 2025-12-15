@@ -82,12 +82,34 @@ const register = asyncWrapper(async (req: Request, res: Response, next: NextFunc
         });
     } catch (err: any) {
         if (err.code === 11000) {
-            return next(new AppError("The email is already signed", 400, httpStatus.FAIL));
+            // MongoDB duplicate key error - identify which field is duplicated
+            const duplicateField = err.keyPattern ? Object.keys(err.keyPattern)[0] : null;
+            let errorMessage = "This information is already registered";
+            
+            if (duplicateField === 'email') {
+                errorMessage = "This email address is already registered. Please use a different email or try logging in.";
+            } else if (duplicateField === 'userName') {
+                errorMessage = "This username is already taken. Please choose a different username.";
+            } else if (duplicateField === 'phoneNumber') {
+                errorMessage = "This phone number is already registered. Please use a different phone number.";
+            }
+            
+            return next(new AppError(errorMessage, 409, httpStatus.FAIL));
         }
         next(err);
     }
 });
-
+const verifyUsername = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
+    const { username } = req.body;
+    const user: any = await Services.verifyUsernameService(username);
+    if (user) {
+        return next(new AppError("username is already taken", 400, httpStatus.FAIL));
+    }
+    res.status(200).json({
+        status: httpStatus.SUCCESS,
+        data: "username is available"
+    });
+});
 const login = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
     const user: any = await Services.loginService(email);
@@ -291,5 +313,7 @@ export {
     followUserById,
     getUserFollowersById,
     unfollowUserById,
-    searchUsers
+    searchUsers,
+    verifyUsername
+    
 };

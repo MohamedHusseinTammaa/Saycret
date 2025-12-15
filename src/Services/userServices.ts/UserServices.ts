@@ -12,6 +12,34 @@ const getUserByIdService = async (id:string) => {
     return await User.findById(id).lean()
 };
 const registerService = async (newUser:any) => {
+    // Check for duplicates before saving to provide better error messages
+    const normalizedUserName = newUser.userName?.toLowerCase();
+    
+    // Check each field separately to identify which one is duplicated
+    const existingEmail = await User.findOne({ email: newUser.email }).lean();
+    if (existingEmail) {
+        const error: any = new Error();
+        error.code = 11000;
+        error.keyPattern = { email: 1 };
+        throw error;
+    }
+
+    const existingUserName = await User.findOne({ userName: normalizedUserName }).lean();
+    if (existingUserName) {
+        const error: any = new Error();
+        error.code = 11000;
+        error.keyPattern = { userName: 1 };
+        throw error;
+    }
+
+    const existingPhone = await User.findOne({ phoneNumber: newUser.phoneNumber }).lean();
+    if (existingPhone) {
+        const error: any = new Error();
+        error.code = 11000;
+        error.keyPattern = { phoneNumber: 1 };
+        throw error;
+    }
+
     await newUser.save();
     const user = await User.find({ _id: newUser.id }, { password: 0, __v: 0 });
     return user;
@@ -135,6 +163,9 @@ const searchUsersService = async (query: string, limit: number, skip: number) =>
 
   return users;
 };
+const verifyUsernameService = async (username: string) => {
+    return await User.findOne({ userName: username });
+};
 export {
     getAllUsersService,
     getUserByIdService,
@@ -147,5 +178,6 @@ export {
     followService,
     getUserFollowersByIdService,
     unfollowService,
-    searchUsersService
+    searchUsersService,
+    verifyUsernameService
 };

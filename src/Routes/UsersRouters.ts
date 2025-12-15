@@ -3,7 +3,7 @@ import {checkSchema} from "express-validator";
 import {verifyToken} from "../Middlewares/verifyToken.ts"
 import { loginUserSchema ,addUserSchema} from "../Middlewares/validationSchemas.ts";
 import {checkIndex} from "../Middlewares/checkIndex.ts"
-import { editUser, getAllUsers, getUserById ,deleteUser, register, login, logout, getUserFollowersById, followUserById, unfollowUserById, searchUsers} from "../Controllers/UsersController.ts";
+import {verifyUsername, editUser, getAllUsers, getUserById ,deleteUser, register, login, logout, getUserFollowersById, followUserById, unfollowUserById, searchUsers} from "../Controllers/UsersController.ts";
 import { allowedTo } from "../Middlewares/allowedTo.ts";
 import { Roles } from "../Utils/usersRoles.ts";
 import multer from "multer";
@@ -22,5 +22,5 @@ router.post("/logout",verifyToken,allowedTo(Roles.ADMIN,Roles.MANAGER,Roles.USER
 router.get("/followers/:id",verifyToken,checkIndex,getUserFollowersById);
 router.post("/follow/:id",verifyToken,checkIndex,followUserById);
 router.delete("/unfollow/:id",verifyToken,checkIndex,unfollowUserById)
-
+router.post("/verify-username",verifyToken,verifyUsername);
 export{router} 

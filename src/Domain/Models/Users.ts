@@ -43,10 +43,8 @@ const usersSchema = new mongoose.Schema({
         type: String,
         required : true,
         minlength: 8,
-        maxlength: 32,
         trim: true,
-        validate : [validator.isStrongPassword,"password must be a strong password"],
-        match : [/^[a-zA-Z0-9]+$/,"password must be a valid password"]
+
     },
     followersCount: {
         type: Number,

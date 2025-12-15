@@ -2,18 +2,18 @@
 import multer from "multer";
 import path from "path";
 import { AppError } from "../Utils/AppError.ts";
-
+import type { Request } from "express";
 const storage = multer.diskStorage({
-  destination: (req: any , file:any, cb:any) => {
+  destination: (req: Request, file:any, cb:any) => {
     cb(null, './Uploads');
   },
-  filename: (req:any, file:any, cb:any) => {
+  filename: (req:Request, file:any, cb:any) => {
     
     cb(null,"profile - "+ Date.now() + path.extname(file.originalname));
   }
 });
 
-const fileFilter = (req:any , file :any,cb:any)=>{
+const fileFilter = (req:Request , file :any,cb:any)=>{
   const img = file.mimetype.split('/')[0];
   if(img === "image"){
     return cb(null,true)
