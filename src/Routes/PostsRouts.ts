@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createPost,searchPosts, getPostById, getPosts ,editPartPost,deletePost,likePost, disLikePost, removeInteractionPost, getProfilePosts} from "../Controllers/PostsController.ts"; 
+import { createPost,searchPosts, getPostById, getPosts ,editPartPost,deletePost,likePost, disLikePost, removeInteractionPost, getProfilePosts, followingFeed} from "../Controllers/PostsController.ts"; 
 import {createCommentSchema, createPostSchema , postQuerySchema} from "../Middlewares/validationSchemas.ts"
 import {checkIndex} from "../Middlewares/checkIndex.ts"
 import {checkSchema} from "express-validator";
@@ -27,4 +27,6 @@ router.post("/",verifyToken,checkSchema(createPostSchema),createPost);
 router.patch("/:id",verifyToken,PostMatching,checkIndex,editPartPost);
 //delete post
 router.delete("/:id",verifyToken,allowedTo(Roles.MANAGER,Roles.ADMIN),PostMatching,checkIndex,deletePost);
+router.get("/feed/following",verifyToken,followingFeed);
+
 export {router};

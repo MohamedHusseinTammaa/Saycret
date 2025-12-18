@@ -5,6 +5,8 @@ import { truncate, write } from "fs";
 import User from "../../Domain/Models/Users.ts";
 import Comment from "../../Domain/Models/Comments.ts"
 import { response } from "express";
+import Follows from "../../Domain/Models/Follows.ts";
+import { writer } from "repl";
 const getPostsService = async (limit:number,skip:number) => {
     let projection = { __v: 0 ,deleted:0 };
     let posts = await Post.find({deleted:{$ne:true}},projection)
@@ -212,6 +214,22 @@ const getProfilePostsService= async (id: string ,limit:number,skip:number )=>{
 
     return posts;
 };
+const followingFeedService= async (userId: string ,limit:number,skip:number )=>{
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+        return;
+    }
+    
+    let projection = { __v: 0 , isAnonymous:0};
+    const following  = await Follows.find({followerId:userId});
+    if(!following)return;
+    let posts = await Post.find({writer:following,isAnonymous:{$ne:true}},projection)
+        .populate({ path: "writer", select: "name.first name.last" }).where({writer:following})
+        .limit(limit)
+        .skip(skip)
+        .lean();
+
+    return posts;
+};
 
 export {
     getPostsService,
@@ -224,4 +242,5 @@ export {
     dislikePostService,
     removeInteractionPostService,
     getProfilePostsService,
+    followingFeedService
 };
