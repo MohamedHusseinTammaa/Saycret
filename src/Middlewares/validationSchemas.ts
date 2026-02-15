@@ -221,12 +221,6 @@ export const addUserSchema = {
     },
     email: {
         trim: true,
-        normalizeEmail: {
-            options: { 
-                gmail_remove_dots: false,
-                gmail_remove_subaddress: false
-            }
-        },
         notEmpty: { 
             errorMessage: "Email is required" 
         },
@@ -303,5 +297,19 @@ export const loginUserSchema = {
         isString: { errorMessage: "password must be string!" },
         notEmpty: { errorMessage: "you need to enter a password !" },
         isLength: { options: { min: 5, max: 32 }, errorMessage: "password must be from 5 to 32 chars" }
+    }
+};
+
+export const verifyEmailSchema = {
+    email: {
+        notEmpty: { errorMessage: "Email is required" },
+        isEmail: { errorMessage: "Please enter a valid email address" }
+    }
+};
+
+export const confirmEmailSchema = {
+    token: {
+        notEmpty: { errorMessage: "Verification token is required" },
+        isString: { errorMessage: "Token must be a string" }
     }
 };

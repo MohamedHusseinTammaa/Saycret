@@ -1,9 +1,9 @@
 import { Router } from "express";
 import {checkSchema} from "express-validator";
 import {verifyToken} from "../Middlewares/verifyToken.ts"
-import { loginUserSchema ,addUserSchema} from "../Middlewares/validationSchemas.ts";
-import {checkIndex} from "../Middlewares/checkIndex.ts"
-import {verifyUsername, editUser, getAllUsers, getUserById ,deleteUser, register, login, logout, getUserFollowersById, followUserById, unfollowUserById, searchUsers} from "../Controllers/UsersController.ts";
+import { loginUserSchema, addUserSchema, verifyEmailSchema, confirmEmailSchema } from "../Middlewares/validationSchemas.ts";
+import { checkIndex } from "../Middlewares/checkIndex.ts";
+import { verifyUsername, editUser, getAllUsers, getUserById, deleteUser, register, login, logout, getUserFollowersById, followUserById, unfollowUserById, searchUsers, verifyEmail, confirmEmail } from "../Controllers/UsersController.ts";
 import { allowedTo } from "../Middlewares/allowedTo.ts";
 import { Roles } from "../Utils/usersRoles.ts";
 import multer from "multer";
@@ -14,8 +14,10 @@ const router = Router();
 router.get("/",verifyToken,allowedTo(Roles.MANAGER,Roles.ADMIN),getAllUsers);
 router.get("/search",verifyToken,searchUsers);
 router.get("/:id",verifyToken,checkIndex,getUserById);
-router.post("/register",upload.single("avatar"),checkSchema(addUserSchema),register);
-router.post("/login",checkSchema(loginUserSchema),login);
+router.post("/register", upload.single("avatar"), checkSchema(addUserSchema), register);
+router.post("/verify-email", checkSchema(verifyEmailSchema), verifyEmail);
+router.post("/confirm", checkSchema(confirmEmailSchema), confirmEmail);
+router.post("/login", checkSchema(loginUserSchema), login);
 router.patch('/:id',verifyToken,allowedTo(Roles.ADMIN,Roles.MANAGER,Roles.USER),checkIndex,editUser);
 router.delete('/',verifyToken,allowedTo(Roles.ADMIN,Roles.MANAGER,Roles.USER),deleteUser);
 router.post("/logout",verifyToken,allowedTo(Roles.ADMIN,Roles.MANAGER,Roles.USER),logout);

@@ -1,6 +1,8 @@
+import crypto from "crypto";
 import blackListedTokenModel from "../../Domain/Models/blackListedTokens.ts";
 import Follows from "../../Domain/Models/Follows.ts";
 import User from "../../Domain/Models/Users.ts";
+import { sendVerificationEmail } from "../../Utils/emailService.ts";
 
 const getAllUsersService = async (limit: number, skip: number) => {
     return await User.find()
@@ -11,37 +13,34 @@ const getAllUsersService = async (limit: number, skip: number) => {
 const getUserByIdService = async (id:string) => {
     return await User.findById(id).lean()
 };
-const registerService = async (newUser:any) => {
-    // Check for duplicates before saving to provide better error messages
-    const normalizedUserName = newUser.userName?.toLowerCase();
-    
-    // Check each field separately to identify which one is duplicated
-    const existingEmail = await User.findOne({ email: newUser.email }).lean();
-    if (existingEmail) {
-        const error: any = new Error();
-        error.code = 11000;
-        error.keyPattern = { email: 1 };
-        throw error;
-    }
+const VERIFICATION_EXPIRY_MS = 24 * 60 * 60 * 1000;
+const RESEND_COOLDOWN_MS = 60 * 1000;
 
-    const existingUserName = await User.findOne({ userName: normalizedUserName }).lean();
-    if (existingUserName) {
-        const error: any = new Error();
-        error.code = 11000;
-        error.keyPattern = { userName: 1 };
-        throw error;
-    }
+function generateVerificationToken(): string {
+    return crypto.randomBytes(32).toString("hex");
+}
 
-    const existingPhone = await User.findOne({ phoneNumber: newUser.phoneNumber }).lean();
-    if (existingPhone) {
-        const error: any = new Error();
-        error.code = 11000;
-        error.keyPattern = { phoneNumber: 1 };
-        throw error;
-    }
+function hashVerificationToken(plain: string): string {
+    return crypto.createHash("sha256").update(plain).digest("hex");
+}
 
+const registerService = async (newUser: any) => {
     await newUser.save();
-    const user = await User.find({ _id: newUser.id }, { password: 0, __v: 0 });
+    const rawToken = generateVerificationToken();
+    const hashedToken = hashVerificationToken(rawToken);
+    const expires = new Date(Date.now() + VERIFICATION_EXPIRY_MS);
+    const sentAt = new Date();
+    await User.findByIdAndUpdate(newUser.id, {
+        emailVerificationToken: hashedToken,
+        emailVerificationExpires: expires,
+        emailVerificationSentAt: sentAt,
+    });
+    try {
+        await sendVerificationEmail(newUser.email, rawToken);
+    } catch {
+        // User is created; they can request a new link via POST /users/verify-email
+    }
+    const user = await User.find({ _id: newUser.id }, { password: 0, __v: 0 }).lean();
     return user;
 };
 const loginService = async (email:string) => {
@@ -166,6 +165,42 @@ const searchUsersService = async (query: string, limit: number, skip: number) =>
 const verifyUsernameService = async (username: string) => {
     return await User.findOne({ userName: username });
 };
+
+/** Resend verification email. Returns { sent } if sent, { rateLimited: true } if cooldown, { alreadyVerified: true }, or { userNotFound: true }. */
+const sendVerificationEmailService = async (email: string): Promise<{ sent?: boolean; rateLimited?: boolean; alreadyVerified?: boolean; userNotFound?: boolean }> => {
+    const user = await User.findOne({ email }).select("+emailVerificationToken +emailVerificationExpires +emailVerificationSentAt").lean();
+    if (!user) return { userNotFound: true };
+    if ((user as any).isEmailVerified) return { alreadyVerified: true };
+    const sentAt = (user as any).emailVerificationSentAt as Date | undefined;
+    if (sentAt && Date.now() - new Date(sentAt).getTime() < RESEND_COOLDOWN_MS) {
+        return { rateLimited: true };
+    }
+    const rawToken = generateVerificationToken();
+    const hashedToken = hashVerificationToken(rawToken);
+    const expires = new Date(Date.now() + VERIFICATION_EXPIRY_MS);
+    await User.updateOne(
+        { email },
+        { emailVerificationToken: hashedToken, emailVerificationExpires: expires, emailVerificationSentAt: new Date() }
+    );
+    await sendVerificationEmail(email, rawToken);
+    return { sent: true };
+};
+
+/** Confirm email with token. Returns true if verified, false if invalid/expired. */
+const confirmEmailService = async (token: string): Promise<boolean> => {
+    const hashed = hashVerificationToken(token);
+    const user = await User.findOne({
+        emailVerificationToken: hashed,
+        emailVerificationExpires: { $gt: new Date() },
+    }).select("_id");
+    if (!user) return false;
+    await User.findByIdAndUpdate(user._id, {
+        isEmailVerified: true,
+        $unset: { emailVerificationToken: 1, emailVerificationExpires: 1, emailVerificationSentAt: 1 },
+    });
+    return true;
+};
+
 export {
     getAllUsersService,
     getUserByIdService,
@@ -179,5 +214,7 @@ export {
     getUserFollowersByIdService,
     unfollowService,
     searchUsersService,
-    verifyUsernameService
+    verifyUsernameService,
+    sendVerificationEmailService,
+    confirmEmailService,
 };

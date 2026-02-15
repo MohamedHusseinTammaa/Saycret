@@ -76,8 +76,23 @@ const usersSchema = new mongoose.Schema({
     deleted:{
         type :Boolean,
         default:false
+    },
+    isEmailVerified: {
+        type: Boolean,
+        default: false
+    },
+    emailVerificationToken: {
+        type: String,
+        select: false
+    },
+    emailVerificationExpires: {
+        type: Date,
+        select: false
+    },
+    emailVerificationSentAt: {
+        type: Date,
+        select: false
     }
-
 });
 
 usersSchema.index({

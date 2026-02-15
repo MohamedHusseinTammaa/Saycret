@@ -78,7 +78,8 @@ const register = asyncWrapper(async (req: Request, res: Response, next: NextFunc
         const user: any = await Services.registerService(newUser);
         res.status(201).json({
             status: httpStatus.SUCCESS,
-            data: user
+            data: user,
+            message: "Please check your email to verify your account before signing in."
         });
     } catch (err: any) {
         if (err.code === 11000) {
@@ -121,6 +122,9 @@ const login = asyncWrapper(async (req: Request, res: Response, next: NextFunctio
     const passwordMatched = await bcrypt.compare(password, user.password);
 
     if (passwordMatched) {
+        if (!user.isEmailVerified) {
+            return next(new AppError("Please verify your email before signing in. Check your inbox or request a new verification link.", 403, httpStatus.FAIL));
+        }
        if (user.deleted) {
           if (Date.now() <= user.restoreUntil.getTime()) {
             
@@ -301,6 +305,50 @@ const searchUsers = asyncWrapper(async (req: Request, res: Response, next: NextF
     });
 });
 
+const verifyEmail = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return next(new AppError(httpMessage.BAD_REQUEST, 400, httpStatus.FAIL, errors.array()));
+    }
+    const email = req.body.email as string;
+    const result = await Services.sendVerificationEmailService(email);
+    if (result.userNotFound) {
+        return res.status(200).json({
+            status: httpStatus.SUCCESS,
+            message: "If an account exists for this email, a verification link has been sent.",
+        });
+    }
+    if (result.alreadyVerified) {
+        return res.status(200).json({
+            status: httpStatus.SUCCESS,
+            message: "Email is already verified. You can sign in.",
+        });
+    }
+    if (result.rateLimited) {
+        return next(new AppError("Please wait at least 1 minute before requesting another verification email.", 429, httpStatus.FAIL));
+    }
+    return res.status(200).json({
+        status: httpStatus.SUCCESS,
+        message: "Verification email sent. Please check your inbox.",
+    });
+});
+
+const confirmEmail = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return next(new AppError(httpMessage.BAD_REQUEST, 400, httpStatus.FAIL, errors.array()));
+    }
+    const token = req.body.token as string;
+
+    const verified = await Services.confirmEmailService(token);
+    if (!verified) {
+        return next(new AppError("Invalid or expired verification token. Please request a new link.", 400, httpStatus.FAIL));
+    }
+    return res.status(200).json({
+        status: httpStatus.SUCCESS,
+        message: "Email verified. You can now sign in.",
+    });
+});
 
 export {
     getAllUsers,
@@ -314,6 +362,7 @@ export {
     getUserFollowersById,
     unfollowUserById,
     searchUsers,
-    verifyUsername
-    
+    verifyUsername,
+    verifyEmail,
+    confirmEmail,
 };
