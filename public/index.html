@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saycret</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="main-container">
+        <div class="container">
+            <header class="logo">
+                <h1>Saycret</h1>
+                <p>Combine the openness of social media with the privacy of anonymous sharing</p>
+            </header>
+
+            <div id="errorMessage" class="error-message" role="alert"></div>
+            <div id="successMessage" class="success-message" role="status"></div>
+
+            <!-- Sign In Form -->
+            <section id="signinForm" class="form active" aria-labelledby="signin-heading">
+                <h2 id="signin-heading" class="form-heading">Sign In</h2>
+                <form id="signinFormEl" class="form-container">
+                    <div class="form-group">
+                        <label for="signin-email" class="sr-only">Email</label>
+                        <input type="email" id="signin-email" name="email" placeholder="Email" required autocomplete="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="signin-password" class="sr-only">Password</label>
+                        <div class="password-container">
+                            <input type="password" id="signin-password" name="password" placeholder="Password" required autocomplete="current-password">
+                            <button type="button" class="toggle-password" aria-label="Show password" data-target="signin-password">Show</button>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn" id="signinBtn">Sign In</button>
+                </form>
+                <div class="divider"><span>OR</span></div>
+                <div class="switch-form">
+                    Don't have an account? <a href="#" id="switchToRegister">Sign up</a>
+                </div>
+            </section>
+
+            <!-- Register Form -->
+            <section id="registerForm" class="form" aria-labelledby="register-heading">
+                <h2 id="register-heading" class="form-heading">Create account</h2>
+                <div class="privacy-note">
+                    Your privacy is our priority. Choose how you want to be seen on Saycret.
+                </div>
+                <form id="registerFormEl" class="form-container">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="register-firstName" class="sr-only">First name</label>
+                            <input type="text" id="register-firstName" name="firstName" placeholder="First name" required autocomplete="given-name" minlength="2" maxlength="50">
+                        </div>
+                        <div class="form-group">
+                            <label for="register-lastName" class="sr-only">Last name</label>
+                            <input type="text" id="register-lastName" name="lastName" placeholder="Last name" required autocomplete="family-name" minlength="2" maxlength="50">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-username" class="sr-only">Username</label>
+                        <input type="text" id="register-username" name="userName" placeholder="Username" required autocomplete="username" minlength="3" maxlength="30" pattern="[a-zA-Z0-9_]+" title="Letters, numbers and underscores only">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-email" class="sr-only">Email</label>
+                        <input type="email" id="register-email" name="email" placeholder="Email" required autocomplete="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-dob" class="sr-only">Date of birth (DD-MM-YYYY)</label>
+                        <input type="text" id="register-dob" name="dateOfBirth" placeholder="Date of birth (DD-MM-YYYY)" required autocomplete="bday">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-gender" class="sr-only">Gender</label>
+                        <select id="register-gender" name="gender" required aria-label="Gender">
+                            <option value="">Gender</option>
+                            <option value="false">Male</option>
+                            <option value="true">Female</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-phone" class="sr-only">Phone number</label>
+                        <input type="tel" id="register-phone" name="phoneNumber" placeholder="Phone number" required autocomplete="tel">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password" class="sr-only">Password</label>
+                        <div class="password-container">
+                            <input type="password" id="register-password" name="password" placeholder="Password" required minlength="8" autocomplete="new-password">
+                            <button type="button" class="toggle-password" aria-label="Show password" data-target="register-password">Show</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-confirm-password" class="sr-only">Confirm password</label>
+                        <div class="password-container">
+                            <input type="password" id="register-confirm-password" name="confirmPassword" placeholder="Confirm password" required autocomplete="new-password">
+                            <button type="button" class="toggle-password" aria-label="Show confirm password" data-target="register-confirm-password">Show</button>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn" id="registerBtn">Sign Up</button>
+                </form>
+                <div class="divider"><span>OR</span></div>
+                <div class="switch-form">
+                    Have an account? <a href="#" id="switchToSignin">Sign in</a>
+                </div>
+            </section>
+
+            <!-- Post-register: verify email notice -->
+            <section id="verifyEmailNotice" class="form">
+                <div class="privacy-note">
+                    We sent a verification link to <strong id="verifyEmailAddress"></strong>. Click the link in the email to verify your account, then sign in.
+                </div>
+                <button type="button" class="btn btn-secondary" id="resendVerifyBtn">Resend verification email</button>
+                <div class="divider"><span>OR</span></div>
+                <div class="switch-form">
+                    <a href="#" id="backToSigninAfterVerify">Back to sign in</a>
+                </div>
+            </section>
+
+            <footer class="footer">
+                <div class="footer-text">By signing up, you agree to our Terms & Privacy Policy</div>
+            </footer>
+        </div>
+    </div>
+
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>

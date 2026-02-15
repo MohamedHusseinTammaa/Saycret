@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verifying Email - Saycret</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="main-container">
+        <div class="container">
+            <header class="logo">
+                <h1>Saycret</h1>
+                <p>Verifying your email...</p>
+            </header>
+
+            <div id="verifyMessage" class="success-message" style="display: block;">
+                <span class="loading"></span> Verifying your email...
+            </div>
+
+            <div id="verifySuccess" style="display: none; text-align: center;">
+                <div class="success-message" style="display: block;">
+                    ✓ Email verified successfully!
+                </div>
+                <p style="color: #8a8a8a; margin: 20px 0;">
+                    Redirecting you to sign in...
+                </p>
+            </div>
+
+            <div id="verifyError" style="display: none; text-align: center;">
+                <div class="error-message" style="display: block;" id="errorText">
+                    Verification failed
+                </div>
+                <p style="color: #8a8a8a; margin: 20px 0;">
+                    The verification link may be invalid or expired.
+                </p>
+                <a href="index.html" class="btn btn-secondary">Back to Sign In</a>
+            </div>
+
+            <footer class="footer">
+                <div class="footer-text">By signing up, you agree to our Terms & Privacy Policy</div>
+            </footer>
+        </div>
+    </div>
+
+    <script type="module">
+        // API Configuration
+        const API_BASE_URL = 'http://localhost:2001/api';
+        const API_ENDPOINTS = {
+            confirm: '/users/confirm'
+        };
+
+        function getApiUrl(endpoint) {
+            return API_BASE_URL + endpoint;
+        }
+
+        // Get token from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+
+        async function verifyEmail() {
+            if (!token) {
+                showError('No verification token found');
+                return;
+            }
+
+            try {
+                const response = await fetch(getApiUrl(API_ENDPOINTS.confirm), {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token }),
+                });
+
+                const data = await response.json().catch(() => ({}));
+
+                if (response.ok) {
+                    showSuccess(data.message || 'Email verified successfully!');
+                    // Redirect to sign in after 2 seconds
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 2000);
+                } else {
+                    showError(data.message || 'Verification failed. The link may be invalid or expired.');
+                }
+            } catch (error) {
+                console.error('Verification error:', error);
+                showError('Connection error. Please try again later.');
+            }
+        }
+
+        function showSuccess(message) {
+            document.getElementById('verifyMessage').style.display = 'none';
+            document.getElementById('verifySuccess').style.display = 'block';
+            document.getElementById('verifyError').style.display = 'none';
+        }
+
+        function showError(message) {
+            document.getElementById('verifyMessage').style.display = 'none';
+            document.getElementById('verifySuccess').style.display = 'none';
+            document.getElementById('verifyError').style.display = 'block';
+            document.getElementById('errorText').textContent = message;
+        }
+
+        // Verify on page load
+        if (token) {
+            verifyEmail();
+        } else {
+            showError('No verification token found in URL');
+        }
+    </script>
+</body>
+</html>

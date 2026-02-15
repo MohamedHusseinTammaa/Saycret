@@ -1,0 +1,341 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background: #000000;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    color: #ffffff;
+}
+
+.main-container {
+    width: 100%;
+    max-width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 390px;
+    margin: 0 auto;
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.logo h1 {
+    font-size: 52px;
+    font-weight: 700;
+    background: linear-gradient(45deg, #E67E22, #F39C12);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -1.5px;
+    margin-bottom: 12px;
+}
+
+.logo p {
+    color: #8a8a8a;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+    max-width: 320px;
+    margin: 0 auto;
+}
+
+.form-heading {
+    display: none;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+.form {
+    display: none;
+}
+
+.form.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 16px 18px;
+    border: 2px solid #262626;
+    border-radius: 24px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    background: #1a1a1a;
+    color: #ffffff;
+}
+
+input:focus,
+select:focus {
+    outline: none;
+    border-color: #E67E22;
+    background: #1a1a1a;
+    box-shadow: 0 0 0 4px rgba(230, 126, 34, 0.1);
+}
+
+input::placeholder {
+    color: #737373;
+}
+
+select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23737373' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 18px center;
+    padding-right: 45px;
+}
+
+select option {
+    background: #1a1a1a;
+    color: #ffffff;
+}
+
+.password-container {
+    position: relative;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #737373;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 12px;
+    transition: all 0.2s;
+}
+
+.toggle-password:hover {
+    color: #E67E22;
+    background: rgba(230, 126, 34, 0.1);
+}
+
+.btn {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(45deg, #E67E22, #F39C12);
+    color: white;
+    border: none;
+    border-radius: 28px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+    box-shadow: 0 4px 14px rgba(230, 126, 34, 0.3);
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(230, 126, 34, 0.4);
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-secondary {
+    background: transparent;
+    border: 2px solid #E67E22;
+    color: #F39C12;
+    box-shadow: none;
+}
+
+.btn-secondary:hover {
+    background: rgba(230, 126, 34, 0.1);
+    box-shadow: none;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    margin: 28px 0;
+    color: #737373;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #262626;
+}
+
+.divider span {
+    padding: 0 18px;
+}
+
+.switch-form {
+    text-align: center;
+    color: #737373;
+    font-size: 14px;
+}
+
+.switch-form a {
+    color: #F39C12;
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.switch-form a:hover {
+    color: #E67E22;
+}
+
+.error-message {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1.5px solid rgba(239, 68, 68, 0.3);
+    color: #ff6b6b;
+    padding: 14px 18px;
+    border-radius: 16px;
+    margin-bottom: 20px;
+    font-size: 13px;
+    display: none;
+    text-align: center;
+}
+
+.success-message {
+    background: rgba(34, 197, 94, 0.1);
+    border: 1.5px solid rgba(34, 197, 94, 0.3);
+    color: #4ade80;
+    padding: 14px 18px;
+    border-radius: 16px;
+    margin-bottom: 20px;
+    font-size: 13px;
+    display: none;
+    text-align: center;
+}
+
+.privacy-note {
+    background: rgba(230, 126, 34, 0.08);
+    border: 1.5px solid rgba(230, 126, 34, 0.2);
+    border-radius: 16px;
+    padding: 16px 18px;
+    margin-bottom: 20px;
+    font-size: 13px;
+    color: #a3a3a3;
+    line-height: 1.6;
+}
+
+.privacy-note strong {
+    color: #F39C12;
+}
+
+.loading {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #ffffff;
+    animation: spin 0.8s linear infinite;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.footer {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.footer-text {
+    color: #737373;
+    font-size: 12px;
+    margin-bottom: 16px;
+}
+
+/* Mobile optimizations */
+@media (max-width: 480px) {
+    .main-container {
+        padding: 16px;
+    }
+    
+    .logo h1 {
+        font-size: 40px;
+    }
+
+    input,
+    select {
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+}
+
+/* Prevent zoom on double tap for iOS */
+input,
+button,
+select {
+    touch-action: manipulation;
+}
+
+/* Safe area for notched devices */
+@supports (padding-top: env(safe-area-inset-top)) {
+    .main-container {
+        padding-top: max(20px, env(safe-area-inset-top));
+        padding-bottom: max(20px, env(safe-area-inset-bottom));
+    }
+}
